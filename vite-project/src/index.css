@@ -2,5 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* extras */
-.font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+/* Monitor and CRT effects */
+.crt-monitor {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-monitor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-size: 100% 4px;
+  background-image: linear-gradient(
+    0deg,
+    transparent 0%,
+    rgba(32, 128, 32, 0.2) 2%,
+    rgba(32, 128, 32, 0.8) 3%,
+    rgba(32, 128, 32, 0.2) 3%,
+    transparent 100%
+  );
+  animation: scanning 7.5s linear infinite;
+}
+
+.crt-monitor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+}
+
+/* Screen pixels effect */
+.crt-pixels {
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 2px 2px;
+}
+
+/* Animation for the scanning effect */
+@keyframes scanning {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Base font */
+.font-mono { 
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}

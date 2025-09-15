@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { MatrixBackground } from './MatrixBackground';
 
-const PROMPT_USER = "yeshi";
-const PROMPT_HOST = "site";
+const PROMPT_USER = "dyno8426";
+const PROMPT_HOST = "know-me-cli";
 
 const THEMES = {
   green: { text: "text-green-400", accent: "text-green-300", caret: "bg-green-400" },
@@ -59,7 +60,7 @@ export default function TerminalPortfolio() {
       "  test        → Run built-in self-checks",
     ] },
     about: { desc: "Who I am", usage: "about", run: async () => [
-      "Hi, I'm Yeshi Dolma (she/her).",
+      "Hi, I'm Adarsh Chauhan (he/him).",
       "Senior Software Engineer (9+ yrs ML & large-scale systems).",
       "Currently exploring the intersection of data science and public health (health equity, cancer prevention, epidemiology).",
       "Outside code: photography, book notes, and creative projects.",
@@ -108,7 +109,7 @@ export default function TerminalPortfolio() {
 | |_| | | | / __| '_ \| / __|
 |  _  | |_| \__ \ | | | \\__ \
 |_| |_|\__,_|___/_| |_|_|___/ 
-   Yeshi · Engineer of systems & stories`;
+   Adarsh Chauhan · Engineer of systems & stories`;
       return art.split("\n");
     } },
     echo: { desc: "Print text", usage: "echo <text>", run: async (_cmd, args=[]) => [args.length ? args.join(" ") : ""] },
@@ -234,7 +235,7 @@ export default function TerminalPortfolio() {
       e.preventDefault();
       if (busy) {
         setBusy(false);
-        typingRef.current = false);
+        typingRef.current = false;
         setHistory((prev) => [...prev, { type: "output", text: "^C" }]);
       }
     }
@@ -244,61 +245,115 @@ export default function TerminalPortfolio() {
   const themeClasses = THEMES[theme] || THEMES.green;
 
   return (
-    <div
-      className={`min-h-screen w-full bg-black ${themeClasses.text} font-mono selection:bg-white/10 selection:text-white`}
-      onClick={() => inputRef.current?.focus()}
-    >
-      <div className="pointer-events-none fixed inset-0 opacity-[0.07] mix-blend-plus-lighter">
-        <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0.2)_70%)]" />
-        <div className="h-full w-full bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.06)_0px,rgba(255,255,255,0.06)_1px,transparent_2px,transparent_4px)]" />
-      </div>
-
-      <main className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-        {history.length === 0 && (
-          <div className="mb-6 text-sm opacity-80">
-            <pre className="whitespace-pre-wrap leading-relaxed">{`Booting terminal... done
-Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
+    <div className="relative min-h-screen w-full bg-neutral-900 p-4 md:p-8 flex items-center justify-center overflow-hidden">
+      <MatrixBackground />
+      {/* Monitor Frame */}
+      <div className="w-[95vw] h-[85vh] max-w-[1400px] bg-neutral-800 rounded-[2.5rem] p-6 md:p-8 lg:p-12 relative shadow-monitor
+                    before:content-[''] before:absolute before:inset-0 before:rounded-[2.5rem] before:border-t-4 before:border-neutral-600/30">
+        {/* Monitor Details */}
+        <div className="absolute -right-3 top-8 w-6 h-32 bg-neutral-700 rounded-r-lg flex flex-col gap-4 p-1.5">
+          <div className="w-3 h-3 rounded-full bg-red-500/50 animate-pulse" />
+          <div className="w-3 h-3 rounded-full bg-green-500/50" />
+          <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+        </div>
+        {/* Power Button */}
+        <div className="absolute -left-4 top-8 w-8 h-8 bg-neutral-700 rounded-l-lg flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center">
+            <div className="w-4 h-4 rounded-full bg-green-500/20 animate-pulse" />
           </div>
-        )}
-
-        <div className="space-y-1">
-          {history.map((item, idx) => (
-            <div key={idx} className="leading-relaxed">
-              {item.type === "input" ? (
-                <pre className="whitespace-pre-wrap"><span className="text-white">{item.text}</span></pre>
-              ) : (
-                <pre className="whitespace-pre-wrap">{item.text}</pre>
-              )}
+        </div>
+        {/* Disk Slots */}
+        <div className="absolute -left-4 bottom-24 w-8 bg-neutral-700 rounded-l-lg p-1">
+          <div className="space-y-2">
+            <div className="h-12 bg-neutral-900/50 rounded-sm" />
+            <div className="h-12 bg-neutral-900/50 rounded-sm" />
+          </div>
+        </div>
+        {/* Screen Inner */}
+        <div 
+          className={`crt-monitor w-full h-full bg-black rounded-xl ${themeClasses.text} font-mono 
+                    selection:bg-white/10 selection:text-white border-b-8 border-neutral-900/50
+                    shadow-inner-screen overflow-hidden`}
+          onClick={() => inputRef.current?.focus()}
+        >
+          {/* Screen Content Container */}
+          <div className="relative h-full z-10 crt-pixels">
+            {/* Screen Overlay Effects - Fixed */}
+            <div className="absolute inset-0 pointer-events-none select-none">
+              <div className="absolute inset-0 bg-screen-vignette opacity-50" />
+              <div className="absolute inset-0 bg-screen-glow opacity-30" />
             </div>
-          ))}
-        </div>
 
-        <form onSubmit={onSubmit} className="mt-2 flex items-baseline gap-2">
-          <span className={`shrink-0 ${themeClasses.accent}`}>{renderPrompt()}</span>
-          <div className="relative grow">
-            <input
-              ref={inputRef}
-              type="text"
-              aria-label="Terminal input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={onKeyDown}
-              disabled={false}
-              className={`w-full bg-transparent outline-none caret-transparent ${themeClasses.text}`}
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <span className={`pointer-events-none absolute -bottom-0.5 left-[calc(var(--caret-x,0)*1ch)] h-4 w-2 animate-pulse ${themeClasses.caret}`} style={{opacity: 0.8}} />
+            {/* Scrollable Content Area with Fade Effect */}
+            <div className="relative z-10 h-full overflow-auto scrollbar-none" 
+                 style={{ 
+                   maskImage: 'linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)',
+                   WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)'
+                 }}>
+              {/* Content Wrapper */}
+              <div className="relative p-4 min-h-full flex flex-col"
+                style={{
+                  background: 'linear-gradient(rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.25) 50%)',
+                  backgroundSize: '100% 4px',
+                }}
+              >
+                <main className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
+                  <div className="flex flex-col min-h-full">
+                    <div className="flex-1">
+                      {history.length === 0 && (
+                        <div className="mb-6 text-sm opacity-80">
+                          <pre className="whitespace-pre-wrap leading-relaxed">{`Booting terminal... done
+Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
+                        </div>
+                      )}
+
+                      <div className="space-y-1">
+                        {history.map((item, idx) => (
+                          <div key={idx} className="leading-relaxed">
+                            {item.type === "input" ? (
+                              <pre className="whitespace-pre-wrap"><span className="text-white">{item.text}</span></pre>
+                            ) : (
+                              <pre className="whitespace-pre-wrap">{item.text}</pre>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-auto">
+                      <form onSubmit={onSubmit} className="mt-2 flex items-baseline gap-2">
+                        <span className={`shrink-0 ${themeClasses.accent}`}>{renderPrompt()}</span>
+                        <div className="relative grow">
+                          <input
+                            ref={inputRef}
+                            type="text"
+                            aria-label="Terminal input"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={onKeyDown}
+                            disabled={false}
+                            className={`w-full bg-transparent outline-none caret-transparent ${themeClasses.text}`}
+                            autoComplete="off"
+                            spellCheck={false}
+                          />
+                          <span className={`pointer-events-none absolute -bottom-0.5 left-[calc(var(--caret-x,0)*1ch)] h-4 w-2 animate-pulse ${themeClasses.caret}`} style={{opacity: 0.8}} />
+                        </div>
+                        <button type="submit" disabled={busy} className="sr-only">run</button>
+                      </form>
+
+                      <div className="mt-4 text-xs opacity-60">
+                        <p>Hints: TAB = autocomplete · ↑/↓ = history · Ctrl+C = cancel typing · try 'help', 'banner', 'theme amber', 'test'</p>
+                      </div>
+                    </div>
+
+                    <div ref={endRef} className="h-12" />
+                  </div>
+                </main>
+              </div>
+            </div>
           </div>
-          <button type="submit" disabled={busy} className="sr-only">run</button>
-        </form>
-
-        <div className="mt-4 text-xs opacity-60">
-          <p>Hints: TAB = autocomplete · ↑/↓ = history · Ctrl+C = cancel typing · try 'help', 'banner', 'theme amber', 'test'</p>
         </div>
-
-        <div ref={endRef} className="h-24" />
-      </main>
+      </div>
     </div>
   );
 }
