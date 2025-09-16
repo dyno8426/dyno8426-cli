@@ -13,6 +13,10 @@ export default {
       boxShadow: {
         'monitor': '0 0 0 8px #2c2c2c,0 0 0 12px #242424,0 0 32px 12px rgba(0,0,0,0.4)',
         'inner-screen': 'inset 0 0 30px rgba(0,0,0,0.7)',
+        'inner-strong': 'inset 0 2px 4px rgba(0,0,0,0.3)',
+        'glow-red': '0 0 8px rgba(239,68,68,0.5)',
+        'glow-green': '0 0 8px rgba(34,197,94,0.5)',
+        'glow-amber': '0 0 8px rgba(251,191,36,0.5)',
       },
     },
   },

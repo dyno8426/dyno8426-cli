@@ -2,6 +2,8 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MatrixBackground } from './MatrixBackground';
+import { GridBackground } from './GridBackground';
+import { BackgroundSwitcher } from './BackgroundSwitcher';
 
 const PROMPT_USER = "dyno8426";
 const PROMPT_HOST = "know-me-cli";
@@ -28,6 +30,7 @@ export default function TerminalPortfolio() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [theme, setTheme] = useState<keyof typeof THEMES>("green");
+  const [background, setBackground] = useState<'matrix' | 'grid'>('grid');
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [cmdIndex, setCmdIndex] = useState(-1);
   const endRef = useRef<HTMLDivElement | null>(null);
@@ -144,21 +147,27 @@ export default function TerminalPortfolio() {
 
   const commandNames = useMemo(() => Object.keys(commands), [commands]);
 
-  const printLines = useCallback(async (lines: string[], cps=900) => {
+  const printLines = useCallback(async (lines: string[], cps=3000) => {
     const delay = 1000 / cps;
+    const batchSize = 3; // Process characters in batches for speed
+    
     for (const line of lines) {
       setHistory((prev) => [...prev, { type: "output", text: "" }]);
       let acc = "";
-      for (const ch of line) {
-        acc += ch;
+      const chars = Array.from(line);
+      
+      for (let i = 0; i < chars.length; i += batchSize) {
+        const batch = chars.slice(i, i + batchSize).join('');
+        acc += batch;
         setHistory((prev) => {
           const next = [...prev];
           next[next.length - 1] = { ...next[next.length - 1], text: acc };
           return next;
         });
-        if (ch !== " " && ch !== "\t") await sleep(delay);
+        // Only delay if not at a space and not processing a big chunk of text
+        if (!batch.match(/^\s+$/) && line.length < 100) await sleep(delay);
       }
-      await sleep(12);
+      await sleep(5); // Reduced line delay
     }
   }, []);
 
@@ -246,29 +255,74 @@ export default function TerminalPortfolio() {
 
   return (
     <div className="relative min-h-screen w-full bg-neutral-900 p-4 md:p-8 flex items-center justify-center overflow-hidden">
-      <MatrixBackground />
+      {background === 'matrix' ? <MatrixBackground /> : <GridBackground />}
+      <BackgroundSwitcher current={background} onChange={setBackground} />
       {/* Monitor Frame */}
       <div className="w-[95vw] h-[85vh] max-w-[1400px] bg-neutral-800 rounded-[2.5rem] p-6 md:p-8 lg:p-12 relative shadow-monitor
-                    before:content-[''] before:absolute before:inset-0 before:rounded-[2.5rem] before:border-t-4 before:border-neutral-600/30">
-        {/* Monitor Details */}
-        <div className="absolute -right-3 top-8 w-6 h-32 bg-neutral-700 rounded-r-lg flex flex-col gap-4 p-1.5">
-          <div className="w-3 h-3 rounded-full bg-red-500/50 animate-pulse" />
-          <div className="w-3 h-3 rounded-full bg-green-500/50" />
-          <div className="w-3 h-3 rounded-full bg-amber-500/50" />
+                    before:content-[''] before:absolute before:inset-0 before:rounded-[2.5rem] before:border-t-4 before:border-neutral-600/30
+                    after:content-[''] after:absolute after:inset-0 after:rounded-[2.5rem] after:shadow-inner-strong">
+        {/* Monitor Brand Label */}
+        <div className="absolute -top-3 left-12 px-4 py-1 bg-neutral-700 rounded-b-lg text-neutral-400 text-xs font-mono tracking-wider">
+          DYNØ·TRON 2000
         </div>
-        {/* Power Button */}
-        <div className="absolute -left-4 top-8 w-8 h-8 bg-neutral-700 rounded-l-lg flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center">
-            <div className="w-4 h-4 rounded-full bg-green-500/20 animate-pulse" />
+
+        {/* Control Panel */}
+        <div className="absolute -right-3 top-8 w-8 flex flex-col gap-6">
+          {/* LED Indicators with Labels */}
+          <div className="bg-neutral-700 rounded-r-lg p-2 space-y-4">
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-3 h-3 rounded-full bg-red-500/80 animate-pulse shadow-glow-red" />
+              <span className="text-[8px] text-neutral-400 rotate-90 translate-y-3">PWR</span>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-glow-green" />
+              <span className="text-[8px] text-neutral-400 rotate-90 translate-y-3">HDD</span>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-3 h-3 rounded-full bg-amber-500/80 shadow-glow-amber" />
+              <span className="text-[8px] text-neutral-400 rotate-90 translate-y-3">NET</span>
+            </div>
+          </div>
+
+          {/* Brightness/Contrast Knobs */}
+          <div className="bg-neutral-700 rounded-r-lg p-2 space-y-4">
+            <div className="w-4 h-4 rounded-full bg-neutral-900 ring-1 ring-neutral-600 shadow-inner" />
+            <div className="w-4 h-4 rounded-full bg-neutral-900 ring-1 ring-neutral-600 shadow-inner" />
           </div>
         </div>
-        {/* Disk Slots */}
-        <div className="absolute -left-4 bottom-24 w-8 bg-neutral-700 rounded-l-lg p-1">
-          <div className="space-y-2">
-            <div className="h-12 bg-neutral-900/50 rounded-sm" />
-            <div className="h-12 bg-neutral-900/50 rounded-sm" />
+
+        {/* Left Side Controls */}
+        <div className="absolute -left-4 flex flex-col gap-6 top-8">
+          {/* Power Button */}
+          <div className="w-10 h-10 bg-neutral-700 rounded-l-lg p-1.5">
+            <div className="w-full h-full rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center shadow-inner-strong">
+              <div className="w-5 h-5 rounded-full bg-green-500/30 animate-pulse shadow-glow-green" />
+            </div>
+          </div>
+          
+          {/* Connection Ports Panel */}
+          <div className="w-10 bg-neutral-700 rounded-l-lg p-1.5 space-y-3">
+            <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">USB</div>
+            <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">COM</div>
+          </div>
+
+          {/* Disk Drives */}
+          <div className="w-10 bg-neutral-700 rounded-l-lg p-1.5 space-y-3">
+            <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center">
+              <div className="absolute right-1 w-1 h-1 rounded-full bg-green-500/50" />
+              <span className="text-[8px] text-neutral-500 rotate-90 translate-y-3">A:</span>
+            </div>
+            <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center">
+              <div className="absolute right-1 w-1 h-1 rounded-full bg-amber-500/50" />
+              <span className="text-[8px] text-neutral-500 rotate-90 translate-y-3">B:</span>
+            </div>
           </div>
         </div>
+
+        {/* Monitor Stand */}
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-48 h-8 bg-neutral-700 rounded-lg
+                      before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 
+                      before:w-64 before:h-2 before:bg-neutral-600 before:rounded-full" />
         {/* Screen Inner */}
         <div 
           className={`crt-monitor w-full h-full bg-black rounded-xl ${themeClasses.text} font-mono 
