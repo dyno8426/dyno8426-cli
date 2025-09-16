@@ -1,4 +1,4 @@
-CONTRIBUTING.md
+# CONTRIBUTING for project: dyno8426@know-me-cli
 
 Thanks for contributing! A few simple guidelines to keep the project consistent.
 

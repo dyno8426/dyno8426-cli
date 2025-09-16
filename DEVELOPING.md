@@ -1,4 +1,4 @@
-DEVELOPING.md
+# DEVELOPING for project: dyno8426@know-me-cli
 
 Development notes for contributors and maintainers.
 
@@ -55,3 +55,20 @@ Notes:
 
 - Add unit tests for commands (suggestion: extract command registry to a separate module for easier unit testing).
 - Add E2E tests for UI interactions using Playwright or Cypress.
+
+7) Unit testing (Vitest)
+
+This project includes a small unit test example for the terminal logic.
+
+To run tests locally:
+
+```bash
+cd vite-project
+npm install
+npm run test
+```
+
+Notes:
+- The test runner used is `vitest`. Tests live under `vite-project/src/__tests__`.
+- If you modify or add tests, run `npm run test` to execute them in watch mode (Vitest defaults to a watch run in interactive terminals).
+

@@ -1,4 +1,4 @@
-# Project: dyno8426@know-me-cli
+# README for project: dyno8426@know-me-cli
 
 Two ways to run:
 
