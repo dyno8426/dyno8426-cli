@@ -45,17 +45,24 @@ export function GridBackground({ columns = 40, rows = 25 }: GridBackgroundProps)
     );
     setGrid(newGrid);
 
-    // Update random cells periodically
+    // Update random cells periodically. Use current grid dimensions from the
+    // previous state (avoid stale calculatedRows/calculatedCols closure values)
     const interval = window.setInterval(() => {
       setGrid(prev => {
-        const newGrid = [...prev.map(row => [...row])];
-        const updates = Math.floor(calculatedRows * calculatedCols * 0.02); // Update 2% of cells
+        if (!prev || prev.length === 0) return prev;
+        const rows = prev.length;
+        const cols = prev[0]?.length || 0;
+        if (cols === 0) return prev;
+
+        const newGrid = prev.map(row => row.slice());
+        const updates = Math.max(1, Math.floor(rows * cols * 0.02)); // Update at least 1 cell
 
         for (let i = 0; i < updates; i++) {
-          const row = Math.floor(Math.random() * calculatedRows);
-          const col = Math.floor(Math.random() * calculatedCols);
-          newGrid[row][col] = {
-            ...newGrid[row][col],
+          const r = Math.floor(Math.random() * rows);
+          const c = Math.floor(Math.random() * cols);
+          if (!newGrid[r] || !newGrid[r][c]) continue;
+          newGrid[r][c] = {
+            ...newGrid[r][c],
             value: Math.random() < 0.5 ? '0' : '1',
             bright: Math.random() < 0.1,
           };
@@ -83,6 +90,12 @@ export function GridBackground({ columns = 40, rows = 25 }: GridBackgroundProps)
     };
   }, []);
 
+  // If grid is not initialized yet, render an empty backdrop to avoid
+  // attempting to map undefined rows/elements during resize operations.
+  if (!grid || grid.length === 0) {
+    return <div className="fixed inset-0 bg-black pointer-events-none select-none font-mono" />;
+  }
+
   return (
     <div className="fixed inset-0 bg-black pointer-events-none select-none font-mono overflow-hidden">
       <div className="absolute inset-0 grid place-items-center">
@@ -96,25 +109,28 @@ export function GridBackground({ columns = 40, rows = 25 }: GridBackgroundProps)
             padding: '0.5rem',
           }}
         >
-          {grid.map((row, i) => 
-            row.map(({ id, value, bright }) => (
-              <div 
-                key={id}
-                className="w-5 h-6 flex items-center justify-center"
-              >
-                <span 
-                  className={`transition-all duration-200
-                    ${bright ? 'text-green-400' : 'text-green-700'}`}
-                  style={{
-                    textShadow: bright 
-                      ? '0 0 8px rgba(74, 222, 128, 0.8), 0 0 12px rgba(74, 222, 128, 0.4)' 
-                      : '0 0 4px rgba(74, 222, 128, 0.3)',
-                  }}
+          {grid.map((row) => 
+            (row || []).map(cell => {
+              if (!cell) return null;
+              const { id, value, bright } = cell;
+              return (
+                <div 
+                  key={id}
+                  className="w-5 h-6 flex items-center justify-center"
                 >
-                  {value}
-                </span>
-              </div>
-            ))
+                  <span 
+                    className={`transition-all duration-200 ${bright ? 'text-green-400' : 'text-green-700'}`}
+                    style={{
+                      textShadow: bright 
+                        ? '0 0 8px rgba(74, 222, 128, 0.8), 0 0 12px rgba(74, 222, 128, 0.4)' 
+                        : '0 0 4px rgba(74, 222, 128, 0.3)',
+                    }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              );
+            })
           )}
         </div>
       </div>
