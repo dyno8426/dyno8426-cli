@@ -1,4 +1,4 @@
-# Terminal Portfolio (Checkpoint2, fixed)
+# Project: dyno8426@know-me-cli
 
 Two ways to run:
 
