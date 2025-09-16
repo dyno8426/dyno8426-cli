@@ -91,11 +91,7 @@ The Vite project contains the primary source code you will probably edit.
 - If terminal input is unresponsive, ensure no element is accidentally overlaying the input (backgrounds should be non-interactive).
 - If styles don't update, confirm Tailwind JIT is watching `vite-project/src/**/*` and `index.html` per `tailwind.config.js` content paths.
 
----
-
 ## Project status & next tasks
 
 - TODO: Improve dynamic monitor sizing to better fit very tall or very wide screens.
 - TODO: Optionally expose command registry as separate module for unit testing and easier extension.
-
----
