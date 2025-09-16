@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './matrix.css';
 
+// MatrixBackground: animated vertical streams of binary characters.
+// Columns are generated with randomized position/speed/delay so the background
+// feels organic. The component regenerates a few columns periodically to
+// maintain motion across the viewport.
+
 const CHARACTERS = '01';
 const NUM_COLUMNS = 200; // Increased for better coverage
 

@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './matrix.css';
 
+// GridBackground: renders a full-viewport grid of binary characters (0/1)
+// The grid size is responsive to the viewport and updates a small percentage
+// of cells at an interval to create a lively background effect.
+
 interface GridPoint {
   id: string;
   value: string;

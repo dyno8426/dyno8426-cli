@@ -61,3 +61,24 @@
 .font-mono { 
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
+
+/* Input caret and alignment helpers */
+.input-mono-caret {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  line-height: 1.25; /* helps vertical alignment */
+  caret-color: currentColor; /* use current text color for caret */
+}
+
+/* Fallback animated caret for environments where native caret may be thin/invisible.
+   This shows only when the input has focus. */
+@keyframes blink-caret {
+  0%, 50% { opacity: 1; }
+  50.1%, 100% { opacity: 0; }
+}
+.input-mono-caret.fallback-caret { position: relative; }
+.input-mono-caret.fallback-caret::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0; width: 2px; background: currentColor; margin: auto 0; animation: blink-caret 0.8s steps(2,end) infinite; display: none; border-radius: 1px;
+}
+.input-mono-caret.fallback-caret:focus::after { display: block; }

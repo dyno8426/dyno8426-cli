@@ -7,6 +7,8 @@ interface BackgroundSwitcherProps {
   onChange: (type: BackgroundType) => void;
 }
 
+// Small floating control that toggles between the two dynamic backgrounds.
+// Kept intentionally lightweight and visual-only — it simply invokes `onChange`.
 export function BackgroundSwitcher({ current, onChange }: BackgroundSwitcherProps) {
   return (
     <button

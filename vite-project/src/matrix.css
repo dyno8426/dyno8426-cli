@@ -1,3 +1,5 @@
+/* Styles for the Matrix-style background animation used by `MatrixBackground.tsx`.
+  Columns use `matrix-rain` to animate vertical streams of characters. */
 @keyframes matrix-rain {
   0% {
     transform: translateY(-100%);

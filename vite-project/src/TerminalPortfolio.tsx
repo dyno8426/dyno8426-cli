@@ -4,9 +4,24 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { MatrixBackground } from './MatrixBackground';
 import { GridBackground } from './GridBackground';
 import { BackgroundSwitcher } from './BackgroundSwitcher';
+// Static terminal content separated for readability and easy edits
+import {
+  PROMPT_USER as PC_PROMPT_USER,
+  PROMPT_HOST as PC_PROMPT_HOST,
+  HELP_LINES,
+  ABOUT_LINES,
+  RESUME_LINES,
+  PROJECTS_LINES,
+  BOOKS_LINES,
+  PHOTOS_LINES,
+  CONTACT_LINES,
+  BANNER_ART,
+  SUDO_HIRE_ME_LINES,
+} from './terminalContent';
 
-const PROMPT_USER = "dyno8426";
-const PROMPT_HOST = "know-me-cli";
+// Use the static prompt values from the content module
+const PROMPT_USER = PC_PROMPT_USER;
+const PROMPT_HOST = PC_PROMPT_HOST;
 
 const THEMES = {
   green: { text: "text-green-400", accent: "text-green-300", caret: "bg-green-400" },
@@ -41,95 +56,36 @@ export default function TerminalPortfolio() {
   const scrollToEnd = () => { endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); };
   useEffect(() => { scrollToEnd(); }, [history, busy]);
 
+  // Commands registry: map text commands to handlers. Keep logic separate from static content.
   const commands: Record<string, Command> = useMemo(() => ({
-    help: { desc: "Show available commands", usage: "help", run: async () => [
-      "COMMANDS:",
-      "  help        → Show available commands",
-      "  about       → Who I am",
-      "  resume      → Professional background",
-      "  projects    → Selected projects",
-      "  books       → Recent book notes",
-      "  photos      → Photo journal info",
-      "  contact     → Reach me",
-      "  content txt → Append arbitrary content (e.g., content Hello world)",
-      "  clear       → Clear the screen",
-      "  theme name  → Switch theme [green|amber|mono]",
-      "  banner      → Show ASCII banner",
-      "  echo txt    → Print text",
-      "  whoami      → Print current user",
-      "  date        → Print date/time",
-      "  open <url>  → Hint to open a URL",
-      "  sudo hire-me→ 😉",
-      "  test        → Run built-in self-checks",
-    ] },
-    about: { desc: "Who I am", usage: "about", run: async () => [
-      "Hi, I'm Adarsh Chauhan (he/him).",
-      "Senior Software Engineer (9+ yrs ML & large-scale systems).",
-      "Currently exploring the intersection of data science and public health (health equity, cancer prevention, epidemiology).",
-      "Outside code: photography, book notes, and creative projects.",
-    ] },
-    resume: { desc: "Professional background", usage: "resume", run: async () => [
-      "Experience:",
-      "- Microsoft · Applied Scientist / Data Scientist — user modeling, click prediction, large-scale ML",
-      "Education:",
-      "- MTech CS/ML | BTech CS",
-      "Skills:",
-      "- Python, PyTorch, Spark, Airflow, SQL, Typescript/React, Next.js, Tailwind",
-      "- Causal inference, time-series, epidemiological modeling (in progress)",
-      "Tip: try 'projects' or 'contact'.",
-    ] },
-    projects: { desc: "Selected projects", usage: "projects", run: async () => [
-      "1) COVID-19 Misinformation & Behavior Signals — WA state time-series (search trends × cases)",
-      "2) Smart ICU Monitoring — ML-assisted signals exploration (prototype)",
-      "3) Photography Portfolio — curation & generative experiments",
-      "Use 'open https://github.com/yeshi' to see GitHub (or your link).",
-    ] },
-    books: { desc: "Recent book notes", usage: "books", run: async () => [
-      "- Being Mortal — Atul Gawande (notes pending)",
-      "- Invisible Women — Caroline Criado Perez (bias × data)",
-      "- The Emperor of All Maladies — Siddhartha Mukherjee",
-      "Use 'content <your text>' to append your own notes live.",
-    ] },
-    photos: { desc: "Photo journal info", usage: "photos", run: async () => [
-      "Photography journal available in gallery view (GUI mode WIP).",
-      "For now, use 'open https://your-domain.com/photos' to view.",
-    ] },
-    contact: { desc: "How to reach me", usage: "contact", run: async () => [
-      "Email   : yeshi@example.com",
-      "LinkedIn: https://linkedin.com/in/yeshidolma",
-      "GitHub  : https://github.com/yeshi",
-    ] },
-    clear: { desc: "Clear the screen", usage: "clear", run: async () => { setHistory([]); return []; } },
-    theme: { desc: "Switch theme", usage: "theme [green|amber|mono]", run: async (_cmd, args=[]) => {
-      const next = (args[0] || "").toLowerCase();
-      if (!Object.keys(THEMES).includes(next)) return [`Unknown theme '${next}'. Available: ${Object.keys(THEMES).join(", ")}`];
+    help: { desc: 'Show available commands', usage: 'help', run: async () => HELP_LINES },
+    about: { desc: 'Who I am', usage: 'about', run: async () => ABOUT_LINES },
+    resume: { desc: 'Professional background', usage: 'resume', run: async () => RESUME_LINES },
+    projects: { desc: 'Selected projects', usage: 'projects', run: async () => PROJECTS_LINES },
+    books: { desc: 'Recent book notes', usage: 'books', run: async () => BOOKS_LINES },
+    photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
+    contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
+    clear: { desc: 'Clear the screen', usage: 'clear', run: async () => { setHistory([]); return []; } },
+    theme: { desc: 'Switch theme', usage: 'theme [green|amber|mono]', run: async (_cmd, args=[]) => {
+      const next = (args[0] || '').toLowerCase();
+      if (!Object.keys(THEMES).includes(next)) return [`Unknown theme '${next}'. Available: ${Object.keys(THEMES).join(', ')}`];
       setTheme(next as keyof typeof THEMES); return [`Theme set to ${next}.`];
     } },
-    banner: { desc: "ASCII banner", usage: "banner", run: async () => {
-      const art = String.raw`
- _   _           _     _     
-| | | |_   _ ___| |__ (_)___ 
-| |_| | | | / __| '_ \| / __|
-|  _  | |_| \__ \ | | | \\__ \
-|_| |_|\__,_|___/_| |_|_|___/ 
-   Adarsh Chauhan · Engineer of systems & stories`;
-      return art.split("\n");
+    banner: { desc: 'ASCII banner', usage: 'banner', run: async () => BANNER_ART.split('\n') },
+    echo: { desc: 'Print text', usage: 'echo <text>', run: async (_cmd, args=[]) => [args.length ? args.join(' ') : ''] },
+    content: { desc: 'Append arbitrary content', usage: 'content <text>', run: async (_cmd, args=[]) => {
+      if (!args.length) return ['Usage: content <text>']; return [args.join(' ')];
     } },
-    echo: { desc: "Print text", usage: "echo <text>", run: async (_cmd, args=[]) => [args.length ? args.join(" ") : ""] },
-    content: { desc: "Append arbitrary content", usage: "content <text>", run: async (_cmd, args=[]) => {
-      if (!args.length) return ["Usage: content <text>"]; return [args.join(" ")];
+    whoami: { desc: 'Print user', usage: 'whoami', run: async () => [PROMPT_USER] },
+    date: { desc: 'Date/time', usage: 'date', run: async () => [nowString()] },
+    open: { desc: 'Hint to open URL', usage: 'open <url>', run: async (_cmd, args=[]) => {
+      if (!args.length) return ['Usage: open <url>']; const url = args[0]; return [`Open this URL in a new tab: ${url}`];
     } },
-    whoami: { desc: "Print user", usage: "whoami", run: async () => [PROMPT_USER] },
-    date: { desc: "Date/time", usage: "date", run: async () => [nowString()] },
-    open: { desc: "Hint to open URL", usage: "open <url>", run: async (_cmd, args=[]) => {
-      if (!args.length) return ["Usage: open <url>"]; const url=args[0]; return [`Open this URL in a new tab: ${url}`];
+    sudo: { desc: 'Fun easter egg', usage: 'sudo hire-me', run: async (_cmd, args=[]) => {
+      if (args.join(' ') === 'hire-me') return SUDO_HIRE_ME_LINES; return ['sudo: permission denied 😅'];
     } },
-    sudo: { desc: "Fun easter egg", usage: "sudo hire-me", run: async (_cmd, args=[]) => {
-      if (args.join(" ") === "hire-me") return ["Permission granted ✔️","Attaching resume... (pretend)","Email me if you want the PDF link."]; 
-      return ["sudo: permission denied 😅"];
-    } },
-    test: { desc: "Run self-checks", usage: "test", run: async () => {
-      const lines: string[] = ["Running self-checks..."]; 
+    test: { desc: 'Run self-checks', usage: 'test', run: async () => {
+      const lines: string[] = ['Running self-checks...'];
       const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✔' : '✖'} ${name}`); };
       const expected = ['help','about','resume','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'];
       assert('command registry present', !!expected.every((k) => k in commands));
@@ -137,12 +93,12 @@ export default function TerminalPortfolio() {
       assert('theme invalid yields error', Array.isArray(themeOut) && themeOut[0].startsWith('Unknown theme'));
       const b = await commands.banner.run('banner', []) as string[];
       assert('banner returns > 3 lines', Array.isArray(b) && b.length > 3);
-      assert('banner contains \\__', b.join('\\n').includes('\\__'));
+      assert('banner contains \\__', b.join('\n').includes('\\__'));
       const e = await commands.echo.run('echo', ['hello', 'world']) as string[];
       assert('echo join works', Array.isArray(e) && e[0] === 'hello world');
       lines.push('Self-checks complete.');
       return lines;
-    } }
+    } },
   }), []);
 
   const commandNames = useMemo(() => Object.keys(commands), [commands]);
@@ -386,11 +342,11 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={onKeyDown}
                             disabled={false}
-                            className={`w-full bg-transparent outline-none caret-transparent ${themeClasses.text}`}
+                            className={`w-full bg-transparent outline-none ${themeClasses.text} input-mono-caret fallback-caret`}
+                            style={{ caretColor: 'currentColor' }}
                             autoComplete="off"
                             spellCheck={false}
                           />
-                          <span className={`pointer-events-none absolute -bottom-0.5 left-[calc(var(--caret-x,0)*1ch)] h-4 w-2 animate-pulse ${themeClasses.caret}`} style={{opacity: 0.8}} />
                         </div>
                         <button type="submit" disabled={busy} className="sr-only">run</button>
                       </form>
