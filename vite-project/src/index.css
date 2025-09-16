@@ -79,6 +79,6 @@
 .input-mono-caret.fallback-caret::after {
   content: '';
   position: absolute;
-  right: 0; top: 0; bottom: 0; width: 2px; background: currentColor; margin: auto 0; animation: blink-caret 0.8s steps(2,end) infinite; display: none; border-radius: 1px;
+  right: 0; top: 0; bottom: 0; width: 8px; background: currentColor; margin: auto 0; animation: blink-caret 0.8s steps(2,end) infinite; display: none; border-radius: 2px;
 }
 .input-mono-caret.fallback-caret:focus::after { display: block; }
