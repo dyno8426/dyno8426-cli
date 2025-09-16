@@ -99,9 +99,3 @@ The Vite project contains the primary source code you will probably edit.
 - TODO: Optionally expose command registry as separate module for unit testing and easier extension.
 
 ---
-
-If you'd like, I can:
-- Add a small `DEVELOPING.md` that explains how to add tests for commands, or
-- Add a short CONTRIBUTING.md with style guidelines for new commands/components.
-
-Tell me which of those you'd prefer and I'll add it.
