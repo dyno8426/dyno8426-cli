@@ -1,4 +1,4 @@
-# DEVELOPING for project: Adarsh Chauhan's DYNφTRON 2000
+# DEVELOPING for project: dyno8426@know-me-cli
 
 Development notes for contributors and maintainers.
 

@@ -1,4 +1,4 @@
-# CONTRIBUTING for project: Adarsh Chauhan's DYNφTRON 2000
+# CONTRIBUTING for project: dyno8426@know-me-cli
 
 Thanks for contributing! A few simple guidelines to keep the project consistent.
 
