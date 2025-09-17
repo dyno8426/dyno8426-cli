@@ -33,6 +33,45 @@ npm run dev
 # build for production
 npm run build
 # output: vite-project/dist
+
+Important: do NOT open `vite-project/dist/index.html` directly in your browser using the `file://` protocol. Modern browsers block loading bundled JS/CSS from the filesystem for security reasons (CORS), which will result in a blank page and console errors.
+
+To preview the production build locally over HTTP you can either use Vite's preview server or the tiny static server included in this repo:
+
+```bash
+cd vite-project
+# recommended: vite's preview (serves from dist)
+npm run preview
+
+# or use the included static server which sets CORS headers
+npm run serve-dist
+
+# open http://localhost:5173 (or the printed port)
+```
+
+## Deploying to GitHub Pages (copy-and-paste friendly)
+
+This project is configured to emit relative asset paths so you can host the `dist` folder on GitHub Pages by copying files directly. `vite.config.ts` uses `base: './'` so the generated `index.html` will reference assets with relative paths.
+
+Two simple options to publish the `dist` build to GitHub Pages:
+
+- Copy `dist` contents to the `docs/` folder on the branch you serve from (commonly `main`) and push. GitHub Pages will serve the files over `https`.
+- Or push the `dist` folder to the `gh-pages` branch (or any branch configured for Pages).
+
+Important files & notes:
+
+- `vite-project/public/.nojekyll` has been added and will be copied into `dist` to avoid GitHub Pages' Jekyll processing (this prevents folders starting with `_` from being ignored).
+- After building (`npm run build`) you can copy the folder contents of `vite-project/dist` to your `docs/` folder and push to GitHub. Example:
+
+```bash
+# from repo root
+cp -a vite-project/dist/. docs/
+git add docs
+git commit -m "chore: update docs for GitHub Pages"
+git push
+```
+
+Once pushed, GitHub Pages will serve the files over HTTPS and users will be able to load the site normally (no CORS/file:// issues).
 ```
 
 ---

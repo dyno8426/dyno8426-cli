@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview"
+  "build": "tsc -b && vite build",
+  "preview": "vite preview",
+  "serve-dist": "node scripts/serve-dist.cjs"
   },
   "dependencies": {
     "react": "^18.3.1",
