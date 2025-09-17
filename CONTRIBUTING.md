@@ -1,4 +1,4 @@
-# CONTRIBUTING for project: dyno8426@know-me-cli
+# CONTRIBUTING for project: Adarsh Chauhan's DYNφTRON 2000
 
 Thanks for contributing! A few simple guidelines to keep the project consistent.
 
@@ -18,7 +18,12 @@ Thanks for contributing! A few simple guidelines to keep the project consistent.
 4) Tests
 - There are no tests yet; small, focused units are encouraged. Consider adding tests under a `tests/` folder and a test runner (Jest/Playwright) if you add behavior worth regression testing.
 
+
 5) Issues and discussions
 - Open an issue for larger scope work (e.g., extracting the command registry, accessibility improvements, or production deployment tasks).
+
+6) Deployment
+- The recommended deployment workflow is `deploy-to-user-pages.yml`, which publishes the site to the `docs/` folder in your `dyno8426.github.io` repo.
+- The site title is now "Adarsh Chauhan's DYNφTRON 2000" (see `vite-project/index.html`).
 
 Thank you — contributions make the project better!

@@ -1,4 +1,4 @@
-# DEVELOPING for project: dyno8426@know-me-cli
+# DEVELOPING for project: Adarsh Chauhan's DYNφTRON 2000
 
 Development notes for contributors and maintainers.
 
@@ -46,10 +46,12 @@ Notes:
 - Global styles and CSS utilities live in `vite-project/src/index.css`.
 - Tailwind configuration is in `vite-project/tailwind.config.js`.
 
+
 5) Build and deploy
 
 - `npm run build` in `vite-project` creates a production bundle in `vite-project/dist`.
-- For GitHub Pages, copy the contents of `vite-project/dist` into a `docs/` folder or deploy via your CI.
+- For GitHub Pages user site deployment, use the included GitHub Actions workflow (`deploy-to-user-pages.yml`) to publish to the `docs/` folder in your `dyno8426.github.io` repo. Manual copy is also supported.
+- The site title is now "Adarsh Chauhan's DYNφTRON 2000" (see `vite-project/index.html`).
 
 6) Future improvements
 

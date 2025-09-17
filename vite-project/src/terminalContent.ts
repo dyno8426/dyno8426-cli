@@ -68,12 +68,37 @@ export const CONTACT_LINES = [
   "GitHub  : https://github.com/yeshi",
 ];
 
-export const BANNER_ART = String.raw` _   _           _     _     
-| | | |_   _ ___| |__ (_)___ 
-| |_| | | | / __| '_ \| / __|
-|  _  | |_| \__ \ | | | \\__ \
-|_| |_|\__,_|___/_| |_|_|___/ 
-   Adarsh Chauhan · Engineer of systems & stories`;
+export const BANNER_ART = String.raw`
+                            .-""""""""""""-.
+                         .-'                '-.
+                       .'                      '.
+                      /                          \
+                     ;                            ;
+                     |                            |
+                     |                       .::::|
+                     |                    .:::::::|
+                     |                      ':::::|
+                     |                            |
+                     ;                            ;
+                      \                          /
+                       '.                      .'
+                         '-.                .-'
+                            '-.__________.-'
+
+
+                ._______________________________________________.
+               /                                               /
+              /           .-~~~~~~~~~~~~~~~~~~~~~~~~~-.        /
+             /          .'                           '.      /
+            /          (                             )      /
+           /            '.                         .'        /
+          /               '-.___________________.-'         /
+         /_________________________________________________/
+
+
+          "Upward, not Northward"
+          — Edwin Abbott Abbott, *Flatland: A Romance of Many Dimensions*
+`;
 
 export const SUDO_HIRE_ME_LINES = [
   "Permission granted ✔️",

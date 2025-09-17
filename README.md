@@ -12,7 +12,8 @@ cd vite-project
 npm install
 # Terminal Portfolio (Vite + CDN versions)
 
-A retro-style terminal portfolio UI built with React + TypeScript + Tailwind. This repository contains both a quick CDN preview and a full local development project powered by Vite.
+
+A retro-style terminal portfolio UI built with React + TypeScript + Tailwind. This repository contains both a quick CDN preview and a full local development project powered by Vite. The site title is now "Adarsh Chauhan's DYNφTRON 2000".
 
 This README documents the project's components, how to run it, where the important source files live, and tips for customization.
 
@@ -49,29 +50,30 @@ npm run serve-dist
 # open http://localhost:5173 (or the printed port)
 ```
 
-## Deploying to GitHub Pages (copy-and-paste friendly)
+## Deploying to GitHub Pages (user site)
 
-This project is configured to emit relative asset paths so you can host the `dist` folder on GitHub Pages by copying files directly. `vite.config.ts` uses `base: './'` so the generated `index.html` will reference assets with relative paths.
+This project is configured for easy deployment to your GitHub user page (`dyno8426.github.io`).
 
-Two simple options to publish the `dist` build to GitHub Pages:
+**Recommended:** Use the included GitHub Actions workflow (`deploy-to-user-pages.yml`) to automatically build and publish the site to the `docs/` folder in your `dyno8426.github.io` repo on every push to `main`.
 
-- Copy `dist` contents to the `docs/` folder on the branch you serve from (commonly `main`) and push. GitHub Pages will serve the files over `https`.
-- Or push the `dist` folder to the `gh-pages` branch (or any branch configured for Pages).
-
-Important files & notes:
-
-- `vite-project/public/.nojekyll` has been added and will be copied into `dist` to avoid GitHub Pages' Jekyll processing (this prevents folders starting with `_` from being ignored).
-- After building (`npm run build`) you can copy the folder contents of `vite-project/dist` to your `docs/` folder and push to GitHub. Example:
+Manual alternative:
+- After building (`npm run build`), copy the contents of `vite-project/dist` to the `docs/` folder in your `dyno8426.github.io` repo and push to `main`.
 
 ```bash
 # from repo root
-cp -a vite-project/dist/. docs/
+cp -a vite-project/dist/. ../dyno8426.github.io/docs/
+cd ../dyno8426.github.io
 git add docs
 git commit -m "chore: update docs for GitHub Pages"
 git push
 ```
 
-Once pushed, GitHub Pages will serve the files over HTTPS and users will be able to load the site normally (no CORS/file:// issues).
+Once pushed, GitHub Pages will serve the files at https://dyno8426.github.io/.
+
+**Notes:**
+- The workflow uses a secret `DEPLOY_TOKEN` for authentication.
+- Only the `deploy-to-user-pages.yml` workflow is needed; the old `deploy-pages.yml` workflow for project pages has been removed.
+- The site title is now "Adarsh Chauhan's DYNφTRON 2000" (see `vite-project/index.html`).
 ```
 
 ---

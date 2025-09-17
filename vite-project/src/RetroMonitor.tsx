@@ -19,7 +19,7 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
                   after:content-[''] after:absolute after:inset-0 after:rounded-[2.5rem] after:shadow-inner-strong">
       {/* Monitor Brand Label */}
       <div className="absolute -top-3 left-12 px-4 py-1 bg-neutral-700 rounded-b-lg text-neutral-400 text-xs font-mono tracking-wider">
-        DYNØ·TRON 2000
+        DYNØ·TRON 2025
       </div>
 
       {/* Control Panel (right) */}
