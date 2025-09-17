@@ -1,4 +1,4 @@
-name: Build and Deploy to User GitHub Pages Repo
+name: Build and Deploy to dyno8426.github.io 
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
         working-directory: ./vite-project
         run: npm run build
 
-      - name: Deploy to user GitHub Pages repo
+      - name: Deploy to dyno8426.github.io
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
           TARGET_REPO: dyno8426/dyno8426.github.io
