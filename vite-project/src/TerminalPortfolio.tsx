@@ -12,6 +12,8 @@ import {
   HELP_LINES,
   ABOUT_LINES,
   WORK_LINES,
+  ACADS_LINES,
+  PUBLICATIONS_LINES,
   PROJECTS_LINES,
   BOOKS_LINES,
   PHOTOS_LINES,
@@ -64,6 +66,8 @@ export default function TerminalPortfolio() {
     help: { desc: 'Show available commands', usage: 'help', run: async () => HELP_LINES },
     about: { desc: 'Who I am', usage: 'about', run: async () => ABOUT_LINES },
   work: { desc: 'Professional background', usage: 'work', run: async () => WORK_LINES },
+  acads: { desc: 'Education background', usage: 'acads', run: async () => ACADS_LINES },
+  publications: { desc: 'Research papers & patents', usage: 'publications', run: async () => PUBLICATIONS_LINES },
     projects: { desc: 'Selected projects', usage: 'projects', run: async () => PROJECTS_LINES },
     books: { desc: 'Recent book notes', usage: 'books', run: async () => BOOKS_LINES },
     photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
@@ -90,13 +94,20 @@ export default function TerminalPortfolio() {
     test: { desc: 'Run self-checks', usage: 'test', run: async () => {
       const lines: string[] = ['Running self-checks...'];
       const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✔' : '✖'} ${name}`); };
-  const expected = ['help','about','work','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'];
+      const expected = [
+        'help','about','work','acads','publications','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'
+      ];
       assert('command registry present', !!expected.every((k) => k in commands));
+      // Check outputs for new commands
+      const acadsOut = await commands.acads.run('acads', []) as string[];
+      assert('acads returns > 3 lines', Array.isArray(acadsOut) && acadsOut.length > 3);
+      const pubsOut = await commands.publications.run('publications', []) as string[];
+      assert('publications returns > 3 lines', Array.isArray(pubsOut) && pubsOut.length > 3);
       const themeOut = await commands.theme.run('theme', ['purple']) as string[];
       assert('theme invalid yields error', Array.isArray(themeOut) && themeOut[0].startsWith('Unknown theme'));
       const b = await commands.banner.run('banner', []) as string[];
       assert('banner returns > 3 lines', Array.isArray(b) && b.length > 3);
-      assert('banner contains \\__', b.join('\n').includes('\\__'));
+  assert('banner contains quote', b.join('\n').includes('Upward, not Northward'));
       const e = await commands.echo.run('echo', ['hello', 'world']) as string[];
       assert('echo join works', Array.isArray(e) && e[0] === 'hello world');
       lines.push('Self-checks complete.');
