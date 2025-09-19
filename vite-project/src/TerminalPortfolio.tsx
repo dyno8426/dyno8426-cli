@@ -11,7 +11,7 @@ import {
   PROMPT_HOST as PC_PROMPT_HOST,
   HELP_LINES,
   ABOUT_LINES,
-  RESUME_LINES,
+  WORK_LINES,
   PROJECTS_LINES,
   BOOKS_LINES,
   PHOTOS_LINES,
@@ -63,7 +63,7 @@ export default function TerminalPortfolio() {
   const commands: Record<string, Command> = useMemo(() => ({
     help: { desc: 'Show available commands', usage: 'help', run: async () => HELP_LINES },
     about: { desc: 'Who I am', usage: 'about', run: async () => ABOUT_LINES },
-    resume: { desc: 'Professional background', usage: 'resume', run: async () => RESUME_LINES },
+  work: { desc: 'Professional background', usage: 'work', run: async () => WORK_LINES },
     projects: { desc: 'Selected projects', usage: 'projects', run: async () => PROJECTS_LINES },
     books: { desc: 'Recent book notes', usage: 'books', run: async () => BOOKS_LINES },
     photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
@@ -90,7 +90,7 @@ export default function TerminalPortfolio() {
     test: { desc: 'Run self-checks', usage: 'test', run: async () => {
       const lines: string[] = ['Running self-checks...'];
       const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✔' : '✖'} ${name}`); };
-      const expected = ['help','about','resume','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'];
+  const expected = ['help','about','work','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'];
       assert('command registry present', !!expected.every((k) => k in commands));
       const themeOut = await commands.theme.run('theme', ['purple']) as string[];
       assert('theme invalid yields error', Array.isArray(themeOut) && themeOut[0].startsWith('Unknown theme'));
@@ -357,7 +357,13 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
                           {item.type === "input" ? (
                             <pre className="whitespace-pre-wrap"><span className="text-white">{item.text}</span></pre>
                           ) : (
-                            <pre className="whitespace-pre-wrap">{item.text}</pre>
+                            <pre className="whitespace-pre-wrap">
+                              {item.text.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+                                part.match(/^https?:\/\//)
+                                  ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline break-all">{part}</a>
+                                  : part
+                              )}
+                            </pre>
                           )}
                         </div>
                       ))}

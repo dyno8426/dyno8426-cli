@@ -8,7 +8,7 @@ export const HELP_LINES = [
   "COMMANDS:",
   "  help        → Show available commands",
   "  about       → Who I am",
-  "  resume      → Professional background",
+  "  work        → Professional background",
   "  projects    → Selected projects",
   "  books       → Recent book notes",
   "  photos      → Photo journal info",
@@ -32,15 +32,28 @@ export const ABOUT_LINES = [
   "Outside code: photography, book notes, and creative projects.",
 ];
 
-export const RESUME_LINES = [
-  "Experience:",
-  "- Microsoft · Applied Scientist / Data Scientist — user modeling, click prediction, large-scale ML",
-  "Education:",
-  "- MTech CS/ML | BTech CS",
-  "Skills:",
-  "- Python, PyTorch, Spark, Airflow, SQL, Typescript/React, Next.js, Tailwind",
-  "- Causal inference, time-series, epidemiological modeling (in progress)",
-  "Tip: try 'projects' or 'contact'.",
+export const WORK_LINES = [
+  "- Google | Bengaluru + Seattle | Senior Software Engineer | May 2020 - present",
+  "  ",
+  "  Led backend for global identity and collaboration products. Shipped security and group management features used by millions.",
+  "  • Designed and launched data residency and privacy systems for enterprise customers.",
+  "  • Re-architected backend flows to cut latency for users worldwide (recognized with internal awards).",
+  "  • Drove cross-team launches from concept to GA, including phased rollouts and technical alignment.",
+  "  • Mentored engineers and set code quality standards, especially in Java readability and backend reliability.",
+  "  • Built custom monitoring and test frameworks to improve reliability and oncall experience.",
+  "  ",
+  "- Intel Labs | Bengaluru | Research Scientist | Aug 2016 - May 2020",
+  "  ",
+  "  Invented new processor core features and instruction set extensions for next-gen CPUs.",
+  "  • Created hardware decompression logic for ultra-fast data access inside the core.",
+  "  • Developed auto-predication and dynamic branch prediction techniques for smarter pipelines.",
+  "  • Integrated algorithms with micro-architecture to optimize control flow and caching.",
+  "  • Authored multiple granted patents and published research papers in computer architecture.",
+  "  • Collaborated with global teams to take research from concept to silicon.",
+  "  ",
+  "Related links: https://www.linkedin.com/in/dyno8426/",
+  "  ",
+  "Tip: Try `study` to continue this story before work.",
 ];
 
 export const PROJECTS_LINES = [
