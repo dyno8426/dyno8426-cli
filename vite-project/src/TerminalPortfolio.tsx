@@ -369,11 +369,14 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
                             <pre className="whitespace-pre-wrap"><span className="text-white">{item.text}</span></pre>
                           ) : (
                             <pre className="whitespace-pre-wrap">
-                              {item.text.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
-                                part.match(/^https?:\/\//)
-                                  ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline break-all">{part}</a>
-                                  : part
-                              )}
+                              {item.text.match(/<a [^>]+>.*?<\/a>/)
+                                ? <span dangerouslySetInnerHTML={{ __html: item.text }} />
+                                : item.text.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+                                    part.match(/^https?:\/\//)
+                                      ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline break-all">{part}</a>
+                                      : part
+                                  )
+                              }
                             </pre>
                           )}
                         </div>

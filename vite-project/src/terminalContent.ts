@@ -56,6 +56,7 @@ export const WORK_LINES = [
   "Out in the world: https://www.linkedin.com/in/dyno8426/",
   "  ",
   "Tip: Try `publications` to see my side-missions originating from work.",
+  "[Last updated: September 19, 2025]",
 ];
 
 export const PUBLICATIONS_LINES = [
@@ -75,6 +76,7 @@ export const PUBLICATIONS_LINES = [
   "Out in the world: https://scholar.google.com/citations?hl=en&user=PDupuQ0AAAAJ",
   "  ",
   "Tip: Try `acads` to continue my story before work.",
+  "[Last updated: September 19, 2025]",
 ];
 
 export const ACADS_LINES = [
@@ -92,6 +94,7 @@ export const ACADS_LINES = [
   "  Focused on professional courses and project work in final two years, with a wide range of electives (Humanities and other engineering department courses) to customize the curriculum.",
   "  ",
   "Tip: Try `hobbies` to continue my story beyond acads and work.",
+  "[Last updated: September 19, 2025]",
 ];
 
 export const PROJECTS_LINES = [
@@ -114,9 +117,9 @@ export const PHOTOS_LINES = [
 ];
 
 export const CONTACT_LINES = [
-  "Email   : yeshi@example.com",
-  "LinkedIn: https://linkedin.com/in/yeshidolma",
-  "GitHub  : https://github.com/yeshi",
+  "Email   : dyno8426@gmail.com",
+  "LinkedIn: https://linkedin.com/in/dyno8426",
+  "GitHub  : https://github.com/dyno8426",
 ];
 
 export const BANNER_ART = String.raw`
@@ -152,7 +155,7 @@ export const BANNER_ART = String.raw`
 `;
 
 export const SUDO_HIRE_ME_LINES = [
-  "Permission granted ✔️",
-  "Attaching resume... (pretend)",
-  "Email me if you want the PDF link.",
+  "Permission granted ✅",
+  "Attaching resume ✅",
+  "<a href='/resources/AC_CV_Dec2022.pdf' download target='_blank' class='text-blue-400 underline break-all'>Download PDF</a> ⬇️",
 ];
