@@ -70,11 +70,6 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
         </div>
       </div>
 
-      {/* Monitor Stand */}
-      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-48 h-8 bg-neutral-700 rounded-lg
-                    before:content-[''] before:absolute before:bottom-0 before:left-1/2 before:-translate-x-1/2 
-                    before:w-64 before:h-2 before:bg-neutral-600 before:rounded-full" />
-
       {/* Screen Inner (click focuses input via onClick) */}
       <div 
         className={`crt-monitor w-full h-full bg-black rounded-xl ${themeClasses.text} font-mono 

@@ -29,9 +29,7 @@ export const HELP_LINES = [
 
 export const ABOUT_LINES = [
   "Hi, I'm Adarsh Chauhan (he/him).",
-  "Senior Software Engineer (9+ yrs ML & large-scale systems).",
-  "Currently exploring the intersection of data science and public health (health equity, cancer prevention, epidemiology).",
-  "Outside code: photography, book notes, and creative projects.",
+  "TODO: TBD",
 ];
 
 export const WORK_LINES = [
