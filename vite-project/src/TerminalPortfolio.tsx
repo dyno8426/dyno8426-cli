@@ -326,7 +326,7 @@ export default function TerminalPortfolio() {
   const themeClasses = THEMES[theme] || THEMES.green;
 
   return (
-    <div className="relative min-h-screen w-full bg-neutral-900 p-4 md:p-8 flex items-center justify-center overflow-hidden">
+  <div className="relative min-h-screen w-full bg-neutral-900 p-4 md:p-8 flex items-center justify-center overflow-hidden">
       {background === 'matrix' ? <MatrixBackground /> : <GridBackground />}
       <BackgroundSwitcher current={background} onChange={setBackground} />
       {/* Monitor Frame (moved to RetroMonitor for clarity) */}
@@ -421,6 +421,9 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
           </div>
         </div>
       </RetroMonitor>
+      <footer className="fixed bottom-2 left-0 w-full text-xs text-neutral-400 text-center select-none pointer-events-none z-50">
+        © 2025 Adarsh Chauhan. All Rights Reserved.
+      </footer>
     </div>
   );
 }
