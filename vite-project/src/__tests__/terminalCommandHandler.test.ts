@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { parseCommand, renderPrompt } from '../terminalLogic';
+import { parseCommand, renderPrompt } from '../terminalCommandHandler';
 
-describe('terminalLogic', () => {
+describe('terminalCommandHandler', () => {
   it('parses simple command', () => {
     const { cmd, args } = parseCommand('help');
     expect(cmd).toBe('help');

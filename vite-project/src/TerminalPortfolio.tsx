@@ -6,21 +6,8 @@ import { GridBackground } from './GridBackground';
 import { BackgroundSwitcher } from './BackgroundSwitcher';
 import RetroMonitor from './RetroMonitor';
 // Static terminal content separated for readability and easy edits
-import {
-  PROMPT_USER as PC_PROMPT_USER,
-  PROMPT_HOST as PC_PROMPT_HOST,
-  HELP_LINES,
-  ABOUT_LINES,
-  WORK_LINES,
-  ACADS_LINES,
-  PUBLICATIONS_LINES,
-  PROJECTS_LINES,
-  BOOKS_LINES,
-  PHOTOS_LINES,
-  CONTACT_LINES,
-  BANNER_ART,
-  SUDO_HIRE_ME_LINES,
-} from './terminalContent';
+import { PROMPT_USER as PC_PROMPT_USER, PROMPT_HOST as PC_PROMPT_HOST } from './terminalContent';
+import { commands, executeCommand } from './terminalCommandHandler';
 
 // Use the static prompt values from the content module
 const PROMPT_USER = PC_PROMPT_USER;
@@ -61,61 +48,8 @@ export default function TerminalPortfolio() {
   const scrollToEnd = () => { endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); };
   useEffect(() => { scrollToEnd(); }, [history, busy]);
 
-  // Commands registry: map text commands to handlers. Keep logic separate from static content.
-  const commands: Record<string, Command> = useMemo(() => ({
-    help: { desc: 'Show available commands', usage: 'help', run: async () => HELP_LINES },
-    about: { desc: 'Who I am', usage: 'about', run: async () => ABOUT_LINES },
-  work: { desc: 'Professional background', usage: 'work', run: async () => WORK_LINES },
-  acads: { desc: 'Education background', usage: 'acads', run: async () => ACADS_LINES },
-  publications: { desc: 'Research papers & patents', usage: 'publications', run: async () => PUBLICATIONS_LINES },
-    projects: { desc: 'Selected projects', usage: 'projects', run: async () => PROJECTS_LINES },
-    books: { desc: 'Recent book notes', usage: 'books', run: async () => BOOKS_LINES },
-    photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
-    contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
-    clear: { desc: 'Clear the screen', usage: 'clear', run: async () => { setHistory([]); return []; } },
-    theme: { desc: 'Switch theme', usage: 'theme [green|amber|mono]', run: async (_cmd, args=[]) => {
-      const next = (args[0] || '').toLowerCase();
-      if (!Object.keys(THEMES).includes(next)) return [`Unknown theme '${next}'. Available: ${Object.keys(THEMES).join(', ')}`];
-      setTheme(next as keyof typeof THEMES); return [`Theme set to ${next}.`];
-    } },
-    banner: { desc: 'ASCII banner', usage: 'banner', run: async () => BANNER_ART.split('\n') },
-    echo: { desc: 'Print text', usage: 'echo <text>', run: async (_cmd, args=[]) => [args.length ? args.join(' ') : ''] },
-    content: { desc: 'Append arbitrary content', usage: 'content <text>', run: async (_cmd, args=[]) => {
-      if (!args.length) return ['Usage: content <text>']; return [args.join(' ')];
-    } },
-    whoami: { desc: 'Print user', usage: 'whoami', run: async () => [PROMPT_USER] },
-    date: { desc: 'Date/time', usage: 'date', run: async () => [nowString()] },
-    open: { desc: 'Hint to open URL', usage: 'open <url>', run: async (_cmd, args=[]) => {
-      if (!args.length) return ['Usage: open <url>']; const url = args[0]; return [`Open this URL in a new tab: ${url}`];
-    } },
-    sudo: { desc: 'Fun easter egg', usage: 'sudo hire-me', run: async (_cmd, args=[]) => {
-      if (args.join(' ') === 'hire-me') return SUDO_HIRE_ME_LINES; return ['sudo: permission denied 😅'];
-    } },
-    test: { desc: 'Run self-checks', usage: 'test', run: async () => {
-      const lines: string[] = ['Running self-checks...'];
-      const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✔' : '✖'} ${name}`); };
-      const expected = [
-        'help','about','work','acads','publications','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'
-      ];
-      assert('command registry present', !!expected.every((k) => k in commands));
-      // Check outputs for new commands
-      const acadsOut = await commands.acads.run('acads', []) as string[];
-      assert('acads returns > 3 lines', Array.isArray(acadsOut) && acadsOut.length > 3);
-      const pubsOut = await commands.publications.run('publications', []) as string[];
-      assert('publications returns > 3 lines', Array.isArray(pubsOut) && pubsOut.length > 3);
-      const themeOut = await commands.theme.run('theme', ['purple']) as string[];
-      assert('theme invalid yields error', Array.isArray(themeOut) && themeOut[0].startsWith('Unknown theme'));
-      const b = await commands.banner.run('banner', []) as string[];
-      assert('banner returns > 3 lines', Array.isArray(b) && b.length > 3);
-  assert('banner contains quote', b.join('\n').includes('Upward, not Northward'));
-      const e = await commands.echo.run('echo', ['hello', 'world']) as string[];
-      assert('echo join works', Array.isArray(e) && e[0] === 'hello world');
-      lines.push('Self-checks complete.');
-      return lines;
-    } },
-  }), []);
 
-  const commandNames = useMemo(() => Object.keys(commands), [commands]);
+  const commandNames = useMemo(() => Object.keys(commands), []);
 
   /**
    * Append output lines to the terminal, printing them with a typewriter-like
@@ -213,25 +147,16 @@ export default function TerminalPortfolio() {
     setBusy(true);
     typingRef.current = true;
 
-    const { cmd, args } = parseCommand(line);
+    const helpers = {
+      clearHistory,
+      setTheme: (t: string) => setTheme(t as keyof typeof THEMES),
+    };
 
-    if (!commands[cmd]) {
-      await printLines([`Command not found: ${cmd}. Type 'help'.`]);
-      setBusy(false);
-      typingRef.current = false;
-      return;
-    }
-
-    try {
-      const out = await commands[cmd].run(cmd, args);
-      if (Array.isArray(out) && out.length) await printLines(out);
-    } catch (err: any) {
-      await printLines([`Error: ${err?.message || String(err)}`]);
-    } finally {
-      setBusy(false);
-      typingRef.current = false;
-    }
-  }, [commands, printLines, pushInputEcho, parseCommand]);
+    const out = await executeCommand(line, helpers);
+    if (Array.isArray(out) && out.length) await printLines(out);
+    setBusy(false);
+    typingRef.current = false;
+  }, [printLines, pushInputEcho, clearHistory]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
