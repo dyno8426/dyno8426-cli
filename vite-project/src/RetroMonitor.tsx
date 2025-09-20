@@ -22,48 +22,48 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
         DYNØ·TRON 2025
       </div>
 
-      {/* Control Panel (right) */}
-      <div className="absolute -right-3 top-8 w-8 flex flex-col gap-6">
-        <div className="bg-neutral-700 rounded-r-lg p-2 space-y-4">
+      {/* Control Panel (right) - fixed vertical alignment and container height */}
+      <div className="absolute -right-3 top-8 flex flex-col items-center justify-center h-[220px] w-12 bg-neutral-700 rounded-r-lg p-2 gap-4">
+        {/* Status Lights - labels below, horizontal */}
+        <div className="w-8 flex flex-col gap-2">
           <div className="flex flex-col items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-red-500/80 animate-pulse shadow-glow-red" />
-            <span className="text-[8px] text-neutral-400 rotate-90 translate-y-3">PWR</span>
+            <span className="text-[8px] text-neutral-400 mt-1">PWR</span>
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-glow-green" />
-            <span className="text-[8px] text-neutral-400 rotate-90 translate-y-3">HDD</span>
+            <span className="text-[8px] text-neutral-400 mt-1">HDD</span>
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-amber-500/80 shadow-glow-amber" />
-            <span className="text-[8px] text-neutral-400 rotate-90 translate-y-3">NET</span>
+            <span className="text-[8px] text-neutral-400 mt-1">NET</span>
           </div>
         </div>
-
-        <div className="bg-neutral-700 rounded-r-lg p-2 space-y-4">
+        {/* Knobs */}
+        <div className="w-8 flex flex-col gap-2 items-center">
           <div className="w-4 h-4 rounded-full bg-neutral-900 ring-1 ring-neutral-600 shadow-inner" />
           <div className="w-4 h-4 rounded-full bg-neutral-900 ring-1 ring-neutral-600 shadow-inner" />
         </div>
       </div>
 
-      {/* Left Side Controls */}
-      <div className="absolute -left-4 flex flex-col gap-6 top-8">
-        <div className="w-10 h-10 bg-neutral-700 rounded-l-lg p-1.5">
-          <div className="w-full h-full rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center shadow-inner-strong">
-            <div className="w-5 h-5 rounded-full bg-green-500/30 animate-pulse shadow-glow-green" />
-          </div>
+  {/* Left Side Controls - moved to bottom left */}
+  <div className="absolute -left-4 bottom-8 flex flex-col items-center justify-center h-[220px] w-12 bg-neutral-700 rounded-l-lg p-2 gap-4">
+        {/* Power Button */}
+        <div className="w-8 h-8 rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center shadow-inner-strong">
+          <div className="w-5 h-5 rounded-full bg-green-500/30 animate-pulse shadow-glow-green" />
         </div>
-
-        <div className="w-10 bg-neutral-700 rounded-l-lg p-1.5 space-y-3">
+        {/* USB and COM Ports */}
+        <div className="w-8 flex flex-col gap-2">
           <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">USB</div>
           <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">COM</div>
         </div>
-
-        <div className="w-10 bg-neutral-700 rounded-l-lg p-1.5 space-y-3">
-          <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center">
+        {/* Floppy A and B */}
+        <div className="w-8 flex flex-col gap-2">
+          <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center justify-center">
             <div className="absolute right-1 w-1 h-1 rounded-full bg-green-500/50" />
             <span className="text-[8px] text-neutral-500 rotate-90 translate-y-3">A:</span>
           </div>
-          <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center">
+          <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center justify-center">
             <div className="absolute right-1 w-1 h-1 rounded-full bg-amber-500/50" />
             <span className="text-[8px] text-neutral-500 rotate-90 translate-y-3">B:</span>
           </div>
