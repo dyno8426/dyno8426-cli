@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { marked } from 'marked';
 import { MatrixBackground } from './MatrixBackground';
 import { GridBackground } from './GridBackground';
 import { BackgroundSwitcher } from './BackgroundSwitcher';
@@ -294,14 +295,8 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
                             <pre className="whitespace-pre-wrap"><span className="text-white">{item.text}</span></pre>
                           ) : (
                             <pre className="whitespace-pre-wrap">
-                              {item.text.match(/<a [^>]+>.*?<\/a>/)
-                                ? <span dangerouslySetInnerHTML={{ __html: item.text }} />
-                                : item.text.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
-                                    part.match(/^https?:\/\//)
-                                      ? <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline break-all">{part}</a>
-                                      : part
-                                  )
-                              }
+                              {/* Render output as Markdown if possible, else fallback to plain text */}
+                              <span dangerouslySetInnerHTML={{ __html: marked.parseInline(item.text) }} />
                             </pre>
                           )}
                         </div>
