@@ -61,27 +61,69 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
       </div>
 
   {/* Left Side Controls - moved to bottom left */}
-  <div className="absolute -left-4 bottom-8 flex flex-col items-center justify-center h-[220px] w-12 bg-neutral-700 rounded-l-lg p-2 gap-4">
-        {/* Power Button (neon blue) */}
-        <div className="w-8 h-8 rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center shadow-inner-strong">
-          <div className="w-5 h-5 rounded-full bg-cyan-400/80 animate-pulse shadow-glow-cyan" />
-        </div>
-        {/* USB and COM Ports */}
-        <div className="w-8 flex flex-col gap-2">
-          <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">USB</div>
-          <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">COM</div>
-        </div>
-        {/* Floppy A and B */}
-        <div className="w-8 flex flex-col gap-2">
-          <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center justify-center">
-            <div className="absolute right-1 w-1 h-1 rounded-full bg-green-500/50" />
-            <span className="text-[8px] text-neutral-500 rotate-90 translate-y-3">A:</span>
+  <div className="absolute -left-4 bottom-8 flex flex-col items-center h-[220px] w-12 bg-neutral-700 rounded-l-lg p-2">
+    {/* Power Button (deep blue) */}
+    <div className="w-8 h-8 rounded-full bg-neutral-900 ring-2 ring-neutral-600 flex items-center justify-center shadow-inner-strong aspect-square" style={{ marginBottom: '0.5rem' }}>
+      <div className="w-5 h-5 rounded-full bg-blue-700/80 animate-pulse shadow-glow-blue" />
+    </div>
+    {/* USB and COM Ports */}
+    <div className="w-8 flex flex-col gap-2" style={{ marginBottom: '0.5rem' }}>
+      <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">USB</div>
+      <div className="h-6 bg-neutral-900/80 rounded-sm flex items-center justify-center text-[8px] text-neutral-500">COM</div>
+    </div>
+    {/* Vertically center the ports as a group */}
+    <div className="flex flex-col items-center justify-center flex-grow w-full" style={{ minHeight: 0 }}>
+      <div className="w-full flex flex-col items-center gap-2">
+        {/* PS/2 Keyboard Port (purple) */}
+  <div className="flex flex-col items-center justify-center h-10 w-10 rounded-full aspect-square">
+          <div className="relative w-7 h-7 rounded-full bg-purple-700 border-2 border-neutral-800 shadow-inner flex items-center justify-center aspect-square">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-purple-400/80 flex items-center justify-center">
+                {/* Pin holes, all inside the colored circle */}
+                <div className="absolute w-full h-full flex flex-col items-center justify-center">
+                  <div className="flex justify-between w-4 absolute top-1 left-1 right-1">
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                  </div>
+                  <div className="flex justify-between w-4 absolute bottom-1 left-1 right-1">
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                  </div>
+                  <div className="flex items-center justify-center absolute inset-0">
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="relative h-8 bg-neutral-900/80 rounded-sm px-1 flex items-center justify-center">
-            <div className="absolute right-1 w-1 h-1 rounded-full bg-amber-500/50" />
-            <span className="text-[8px] text-neutral-500 rotate-90 translate-y-3">B:</span>
-          </div>
+          <span className="mt-1 text-[8px] text-purple-400 font-bold">KB</span>
         </div>
+        {/* PS/2 Mouse Port (green) */}
+  <div className="flex flex-col items-center justify-center h-10 w-10 rounded-full aspect-square">
+          <div className="relative w-7 h-7 rounded-full bg-green-700 border-2 border-neutral-800 shadow-inner flex items-center justify-center aspect-square">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-green-400/80 flex items-center justify-center">
+                {/* Pin holes, all inside the colored circle */}
+                <div className="absolute w-full h-full flex flex-col items-center justify-center">
+                  <div className="flex justify-between w-4 absolute top-1 left-1 right-1">
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                  </div>
+                  <div className="flex justify-between w-4 absolute bottom-1 left-1 right-1">
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                  </div>
+                  <div className="flex items-center justify-center absolute inset-0">
+                    <div className="w-1 h-1 rounded-full bg-black" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span className="mt-1 text-[8px] text-green-400 font-bold">MS</span>
+        </div>
+      </div>
+    </div>
       </div>
 
       {/* Screen Inner (click focuses input via onClick) */}
