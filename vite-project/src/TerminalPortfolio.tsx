@@ -67,7 +67,11 @@ export default function TerminalPortfolio() {
     for (const line of lines) {
       // Respect cancellation: if set, abort printing immediately
       if (cancelRef.current) return;
-      // Add a placeholder output entry which we'll progressively fill
+      // Always print each line with typing effect, even if only one line
+      if (line.trim() === '') {
+        setHistory((prev) => [...prev, { type: 'output', text: '' }]);
+        continue;
+      }
       setHistory((prev) => [...prev, { type: 'output', text: '' }]);
       let acc = '';
       const chars = Array.from(line);
@@ -75,20 +79,14 @@ export default function TerminalPortfolio() {
       for (let i = 0; i < chars.length; i += batchSize) {
         const batch = chars.slice(i, i + batchSize).join('');
         acc += batch;
-        // Mutate only the last history entry to avoid triggering unrelated renders
         setHistory((prev) => {
           const next = [...prev];
           next[next.length - 1] = { ...next[next.length - 1], text: acc };
           return next;
         });
-
-        // Allow an in-flight Ctrl-C to interrupt printing mid-line
         if (cancelRef.current) return;
-
-        // Throttle printing to create a readable typing effect for short lines
         if (!batch.match(/^\s+$/) && line.length < 100) await sleep(delay);
       }
-      // Small pause between lines so multi-line outputs feel natural
       await sleep(5);
     }
   }, []);
@@ -296,7 +294,15 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
                           ) : (
                             <pre className="whitespace-pre-wrap">
                               {/* Render output as Markdown if possible, else fallback to plain text */}
-                              <span dangerouslySetInnerHTML={{ __html: marked.parseInline(item.text) }} />
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: (typeof marked.parseInline === 'function'
+                                    ? marked.parseInline(item.text)
+                                    : marked.parse(item.text)
+                                  ).toString()
+                                    .replace(/<a /g, '<a class="text-blue-400 underline" target="_blank" rel="noopener noreferrer" ')
+                                }}
+                              />
                             </pre>
                           )}
                         </div>
