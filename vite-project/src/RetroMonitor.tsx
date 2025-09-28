@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 type ThemeClasses = { text: string; accent: string; caret: string };
 
@@ -16,6 +16,11 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
   // State for NET LED blinking
   const [netOn, setNetOn] = useState(true);
 
+  // Easter egg: falling SVG logo
+  const [falling, setFalling] = useState(false);
+  const [fallX, setFallX] = useState(0);
+  const fallRef = useRef<HTMLDivElement>(null);
+
   // Random rapid blinking effect for NET LED
   useEffect(() => {
     let timeout: number;
@@ -27,15 +32,70 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
     blink();
     return () => clearTimeout(timeout);
   }, []);
+
+  // Handle falling SVG animation
+  useEffect(() => {
+    if (falling) {
+      const timer = setTimeout(() => setFalling(false), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [falling]);
+
+  function triggerFallingLogo() {
+    // Pick a random X position within the viewport width
+    const vw = window.innerWidth;
+    const iconWidth = 32;
+    const min = 0;
+    const max = vw - iconWidth;
+    setFallX(Math.floor(Math.random() * (max - min + 1)) + min);
+    setFalling(false); // reset if already falling
+    setTimeout(() => setFalling(true), 10);
+  }
+
   return (
     <div className="w-[95vw] h-[85vh] max-w-[1400px] bg-neutral-800 rounded-[2.5rem] p-6 md:p-8 lg:p-12 relative shadow-monitor
                   before:content-[''] before:absolute before:inset-0 before:rounded-[2.5rem] before:border-t-4 before:border-neutral-600/30
                   after:content-[''] after:absolute after:inset-0 after:rounded-[2.5rem] after:shadow-inner-strong">
-      {/* Monitor Brand Label - pill at bottom center, vertically centered in border */}
-  <div className="absolute left-1/2 bottom-3 -translate-x-1/2 flex items-center justify-center h-6" style={{ transform: 'translate(-50%, 0)' }}>
-  <div className="px-4 py-1 bg-neutral-600/90 rounded-full shadow border border-neutral-700 text-neutral-400 text-xs font-mono tracking-wide flex items-center justify-center select-none z-20 h-6 opacity-90">
-          DYNØ·TRON 2025
+      {/* Monitor Brand Label - pill at bottom center, always above screen, now clickable */}
+      <div className="pointer-events-auto">
+        <div
+          className="absolute left-1/2 bottom-3 -translate-x-1/2 flex items-center justify-center h-6 z-50 cursor-pointer group"
+          style={{ transform: 'translate(-50%, 0)' }}
+          onClick={triggerFallingLogo}
+          tabIndex={0}
+          aria-label="Trigger Dynotron Easter Egg"
+        >
+          <div className="px-4 py-1 bg-neutral-600/90 rounded-full shadow border border-neutral-700 text-neutral-400 text-xs font-mono tracking-wide flex items-center justify-center select-none h-6 opacity-90 group-hover:opacity-100 transition-opacity">
+            DYNØ·TRON 2025
+          </div>
         </div>
+        {/* Falling SVG logo animation */}
+        {falling && (
+          <div
+            ref={fallRef}
+            style={{
+              position: 'fixed',
+              left: fallX,
+              top: 0,
+              width: 32,
+              height: 32,
+              zIndex: 1000,
+              pointerEvents: 'none',
+              animation: 'fall-logo 1.1s cubic-bezier(0.4,0.8,0.6,1) forwards',
+            }}
+          >
+            <img src="/zero-one-icon.svg" alt="A0/1C logo" width={32} height={32} draggable={false} />
+          </div>
+        )}
+        {/* Keyframes for falling animation */}
+        <style>{`
+          @keyframes fall-logo {
+            0% { transform: translateY(-40px) scale(1) rotate(-10deg); opacity: 0.7; }
+            10% { opacity: 1; }
+            80% { transform: translateY(${typeof window !== 'undefined' ? '80vh' : '80vh'}) scale(1.1) rotate(8deg); opacity: 1; }
+            100% { transform: translateY(100vh) scale(0.95) rotate(0deg); opacity: 0; }
+          }
+        `}</style>
       </div>
 
       {/* Control Panel (right) - fixed vertical alignment and container height */}
