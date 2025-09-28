@@ -31,9 +31,11 @@ export default function RetroMonitor({ children, onClick, themeClasses }: RetroM
     <div className="w-[95vw] h-[85vh] max-w-[1400px] bg-neutral-800 rounded-[2.5rem] p-6 md:p-8 lg:p-12 relative shadow-monitor
                   before:content-[''] before:absolute before:inset-0 before:rounded-[2.5rem] before:border-t-4 before:border-neutral-600/30
                   after:content-[''] after:absolute after:inset-0 after:rounded-[2.5rem] after:shadow-inner-strong">
-      {/* Monitor Brand Label */}
-      <div className="absolute -top-3 left-12 px-4 py-1 bg-neutral-700 rounded-b-lg text-neutral-400 text-xs font-mono tracking-wider">
-        DYNØ·TRON 2025
+      {/* Monitor Brand Label - pill at bottom center, vertically centered in border */}
+  <div className="absolute left-1/2 bottom-3 -translate-x-1/2 flex items-center justify-center h-6" style={{ transform: 'translate(-50%, 0)' }}>
+  <div className="px-4 py-1 bg-neutral-600/90 rounded-full shadow border border-neutral-700 text-neutral-400 text-xs font-mono tracking-wide flex items-center justify-center select-none z-20 h-6 opacity-90">
+          DYNØ·TRON 2025
+        </div>
       </div>
 
       {/* Control Panel (right) - fixed vertical alignment and container height */}
