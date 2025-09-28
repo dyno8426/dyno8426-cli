@@ -13,7 +13,11 @@ import {
 	CONTACT_LINES,
 	BANNER_ART,
 	SUDO_HIRE_ME_LINES,
-	INTERESTS_LINES,
+	INTERESTS_READING,
+	INTERESTS_PHOTOGRAPHY,
+	INTERESTS_ART,
+	INTERESTS_MUSIC,
+	INTERESTS_MISC,
 } from './terminalContent';
 
 const PROMPT_USER = PC_PROMPT_USER;
@@ -37,37 +41,41 @@ export const commands: Record<string, Command> = {
 	interests: {
 		desc: 'Show or explain a specific hobby',
 		usage: 'interests [all|reading|photography|art|music|misc]',
-		   run: async (_cmd, args=[]) => {
-			   // Define the line ranges for each hobby
-			   const reading = INTERESTS_LINES.slice(0, 3);
-			   const photography = INTERESTS_LINES.slice(4, 6);
-			   const art = INTERESTS_LINES.slice(7, 9);
-			   const music = INTERESTS_LINES.slice(10, 12);
-			   // Miscellaneous hobbies: strength training, mixology, gardening, chess
-			   const misc = INTERESTS_LINES.slice(13);
-			   // Help text
-			   const help = [
-				   'Usage: interests [all|reading|photography|art|music|misc]',
-				   'Options:',
-				   '  all          Show all hobbies',
-				   '  reading      About reading/books',
-				   '  photography  About photography',
-				   '  art          About art',
-				   '  music        About music',
-				   '  misc         Miscellaneous hobbies (strength, mixology, gardening, chess)',
-				   '',
-				   'Type "interests all" to see everything or "interests reading" for just reading.'
-			   ];
-			   const opt = (args[0] || '').toLowerCase();
-			   if (!opt || opt === 'help') return [...help];
-			   if (opt === 'all') return [...INTERESTS_LINES];
-			   if (opt === 'reading') return [...reading];
-			   if (opt === 'photography') return [...photography];
-			   if (opt === 'art') return [...art];
-			   if (opt === 'music') return [...music];
-			   if (opt === 'misc') return [...misc];
-			   return ['Unknown option for interests. Type "interests help" for usage.'];
-		   }
+		run: async (_cmd, args=[]) => {
+			const help = [
+				'Usage: interests [all|reading|photography|art|music|misc]',
+				'Options:',
+				'  all          Show all hobbies',
+				'  reading      About reading/books',
+				'  photography  About photography',
+				'  art          About art',
+				'  music        About music',
+				'  misc         Miscellaneous hobbies (strength, mixology, gardening, chess)',
+				'',
+				'Type "interests all" to see everything or "interests reading" for just reading.'
+			];
+			const opt = (args[0] || '').toLowerCase();
+			if (!opt || opt === 'help') return [...help];
+			if (opt === 'all') {
+				return [
+					...INTERESTS_READING,
+					'',
+					...INTERESTS_PHOTOGRAPHY,
+					'',
+					...INTERESTS_ART,
+					'',
+					...INTERESTS_MUSIC,
+					'',
+					...INTERESTS_MISC,
+				];
+			}
+			if (opt === 'reading') return [...INTERESTS_READING];
+			if (opt === 'photography') return [...INTERESTS_PHOTOGRAPHY];
+			if (opt === 'art') return [...INTERESTS_ART];
+			if (opt === 'music') return [...INTERESTS_MUSIC];
+			if (opt === 'misc') return [...INTERESTS_MISC];
+			return ['Unknown option for interests. Type "interests help" for usage.'];
+		}
 	},
 	help: { desc: 'Show available commands', usage: 'help', run: async () => HELP_LINES },
 	about: { desc: 'Who I am', usage: 'about', run: async () => ABOUT_LINES },
