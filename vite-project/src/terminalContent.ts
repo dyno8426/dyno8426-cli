@@ -127,10 +127,24 @@ export const INTERESTS_MISC = [
 ];
 
 export const PROJECTS_LINES = [
-  "1) COVID-19 Misinformation & Behavior Signals — WA state time-series (search trends × cases)",
-  "2) Smart ICU Monitoring — ML-assisted signals exploration (prototype)",
-  "3) Photography Portfolio — curation & generative experiments",
-  "Use 'open https://github.com/yeshi' to see GitHub (or your link).",
+  "- dyno8426-cli:",
+  "  This very project! A terminal-style personal website that runs in the browser. Built with React, Vite, and TailwindCSS. Inspired by retro computer aesthetics and command-line interfaces. Features dynamic backgrounds, theme switching, and a variety of random commands to explore my work experience and non-work interests.",
+  "  ",
+  "  Whether we like it or not right now, we are being ushered into the genAI era. And this project is no exception. I have completely developed this project using *\"prompt engineering\"* and (to use the more social-media influenced cringey term) *\"vibe-coding\"* from scratch. I had no prior experience with hard-core Javascript, React, CSS, or any of the other hot web-development infrastructures essential for modern, responsive websites.",
+  "  ",
+  "  At the same time, after having prompt engineering 99% of the website logic and styling using genAI agents, I can definitely say with confidence that I still don't know about it any more “expertly” that I did before. Having said that, I do understand the various modules and components that go in state-of-the-art websites (at least of low-level complexity as aimed for this project).",
+  "  ",
+  "  This fun, quirky, small-scale experiment with genAI has definitely been successful as per my expectations in translating my vision to material code. It impressed me with its efficiency considering the percentage of when I had to backtrack. Plus it has been incredibly engaging mainly because it brought the creative process in the foreground and pushed the slow, tedious, and often slow part of researching, cross-wiring and debugging parts in the background.",
+  "  ",
+  "  Probably a seasoned web-developer would have done a better job in refactoring the code, reducing complexity or implementing it maybe even faster than how much time it took me to iterate over it. But I am not a seasoned web-developer and I'm not trying to be one right now.",
+  "  ",
+  "  To me, this has been a proof-of-concept of the role of genAI in making operating humans more capable like any good tool does. One still has to learn how to operate the tool, know its limitations and know when not to use the sword to cut a sheet of paper. And like any new foundational invention in tooling, this will need overcoming the resistance of change and adapting to the right place for it in our daily workflow as (software) engineers of any kind.",
+  "  ",
+  "  Since genAI has been meteorically rising and encroaching the expertise on producing artificially creative content from its almost infinite access to existing knowledge about that type of content, I have not been paranoid that it will make web-development skill obsolete. I feel that it will just change the nature of jobs that we have to do. It will affect you negatively if you can't leverage this new tool to unlock the productivity levels that your peers using this technology most likely will. That part needs the same caution like it goes for any new tech breakthrough which makes toilsome part vanish through better automation for example.",
+  "  ",
+  "  I think of these genAI products like any collaborator engineer, and a really good collaborator at that. Sure, it can misinterpret its sources and/or my instructions, or get stuck in a eddy of non-progressive attempts. But that's what I am here to guide and course-correct it for. My native expertise about coding and software best practices knows not to accept any random code at face value. This collaboration will only make the actor using these agentic tools more creative, capable and free to think and solve for higher, more abstract level problems, like performance and organizational improvements to their web application projects. And it is very encouraging once you get the rhythm of guiding the genAI agent to produce meaningful results. It got me thinking and coming back with more and more feature enrichment that I wanted to do for my website project. This just gave me the courage and excitement to go for more projectifying more ideas that I would not have done without these genAI tools due to the daunting nature of a steep learning curve and unfamiliarity that any new technology brings. So, I think there will be more genAI assisted projects that I look forward to creating and showcasing.",
+  "  ",
+  "  Github link: https://github.com/dyno8426/dyno8426-cli",
 ];
 
 export const BOOKS_LINES = [
