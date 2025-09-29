@@ -31,6 +31,7 @@ const THEMES = {
 
 const nowString = () => new Date().toLocaleString();
 
+
 export type Command = {
 	desc: string;
 	usage: string;
@@ -38,6 +39,18 @@ export type Command = {
 };
 
 export const commands: Record<string, Command> = {
+	ndice: {
+		desc: 'Roll the dice and generate a random number between 0 and N',
+		usage: 'ndice &lt;positive integer&gt;',
+		run: async (_cmd, args=[]) => {
+			const n = parseInt(args[0], 10);
+			if (isNaN(n) || n < 1) {
+				return ['Usage: ndice [positive integer]'];
+			}
+			const rand = Math.floor(Math.random() * (n + 1));
+			return [`Random number between 0 and ${n}: ${rand}`];
+		}
+	},
 	interests: {
 		desc: 'Show or explain a specific hobby',
 		usage: 'interests [all|reading|photography|art|music|misc]',
@@ -95,9 +108,6 @@ export const commands: Record<string, Command> = {
 	} },
 	banner: { desc: 'ASCII banner', usage: 'banner', run: async () => BANNER_ART.split('\n') },
 	echo: { desc: 'Print text', usage: 'echo <text>', run: async (_cmd, args=[]) => [args.length ? args.join(' ') : ''] },
-	content: { desc: 'Append arbitrary content', usage: 'content <text>', run: async (_cmd, args=[]) => {
-		if (!args.length) return ['Usage: content <text>']; return [args.join(' ')];
-	} },
 	whoami: { desc: 'Print user', usage: 'whoami', run: async () => [PROMPT_USER] },
 	date: { desc: 'Date/time', usage: 'date', run: async () => [nowString()] },
 	open: { desc: 'Open a URL', usage: 'open <url>', run: async (_cmd, args=[]) => {

@@ -15,14 +15,14 @@ export const HELP_LINES = [
   "  books          → Recent book notes",
   "  photos         → Photo journal info",
   "  contact        → Reach me",
-  "  content txt    → Append arbitrary content (e.g., content Hello world)",
   "  clear          → Clear the screen",
-  "  theme name     → Switch theme [green|amber|mono]",
+  "  theme [name]   → Switch theme [green|amber|mono]",
   "  banner         → Show ASCII banner",
-  "  echo txt       → Print text",
+  "  echo [txt]     → Print text",
   "  whoami         → Print current user",
   "  date           → Print date/time",
-  "  open <url>     → Hint to open a URL",
+  "  open [url]     → Hint to open a URL",
+  "  ndice [int]    → Random number between 0 and N",
   "  sudo hire-me   → 😉",
   "  test           → Run built-in self-checks",
 ];
@@ -151,7 +151,6 @@ export const BOOKS_LINES = [
   "- Being Mortal — Atul Gawande (notes pending)",
   "- Invisible Women — Caroline Criado Perez (bias × data)",
   "- The Emperor of All Maladies — Siddhartha Mukherjee",
-  "Use 'content <your text>' to append your own notes live.",
 ];
 
 export const PHOTOS_LINES = [
