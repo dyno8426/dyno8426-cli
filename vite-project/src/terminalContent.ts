@@ -29,7 +29,7 @@ export const HELP_LINES = [
 
 export const ABOUT_LINES = [
   "Hi, I'm Adarsh Chauhan (he/him).",
-  "TODO: TBD",
+  "Building with computers, growing through books, and capturing life one photo and lesson at a time.",
 ];
 
 export const WORK_LINES = [
@@ -159,9 +159,18 @@ export const PHOTOS_LINES = [
 ];
 
 export const CONTACT_LINES = [
-  "Email   : dyno8426@gmail.com",
-  "LinkedIn: https://linkedin.com/in/dyno8426",
-  "GitHub  : https://github.com/dyno8426",
+  "Email               : dyno8426@gmail.com",
+  "LinkedIn            : https://linkedin.com/in/dyno8426",
+  "GitHub              : https://github.com/dyno8426",
+  "Twitter             : https://twitter.com/dyno8426",
+  "Substack            : https://dyno8426.substack.com",
+  "Instagram           : https://instagram.com/dyno8426",
+  "Google Scholar      : https://scholar.google.com/citations?hl=en&user=PDupuQ0AAAAJ",
+  "Goodreads           : https://goodreads.com/dyno8426",
+  "StoryGraph          : https://app.thestorygraph.com/profile/dyno8426",
+  "Unsplash            : http://unsplash.com/@dyno8426",
+  "Spotify             : https://open.spotify.com/user/31ijg2wfzfzfn6wt5jg7qiihewy4",
+  "Board Game Arena    : https://boardgamearena.com/player?id=88473419"
 ];
 
 export const BANNER_ART = String.raw`
