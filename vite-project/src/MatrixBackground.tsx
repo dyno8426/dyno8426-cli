@@ -9,6 +9,7 @@ import './matrix.css';
 const CHARACTERS = '01';
 const NUM_COLUMNS = 200; // Increased for better coverage
 
+
 interface Column {
   id: number;
   x: number;
@@ -16,18 +17,34 @@ interface Column {
   speed: string;
   delay: string;
   chars: string[];
+  glowMask: boolean[];
+}
+
+
+function randomGlowMask(len: number): boolean[] {
+  // Randomly select 1 to len/3 indices to glow
+  const numGlow = 1 + Math.floor(Math.random() * Math.max(1, len / 3));
+  const mask = Array(len).fill(false);
+  for (let i = 0; i < numGlow; i++) {
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * len);
+    } while (mask[idx]);
+    mask[idx] = true;
+  }
+  return mask;
 }
 
 function generateColumn(id: number): Column {
+  const len = 35 + Math.floor(Math.random() * 25);
   return {
     id,
     x: Math.random() * 100,
-    startY: `${Math.random() * -300}%`, // More varied starting positions
-    speed: `${3 + Math.random() * 4}s`, // Same speed as before
-    delay: `${Math.random() * -10}s`, // More varied delays for better distribution
-    chars: Array.from({ length: 35 + Math.floor(Math.random() * 25) }, () => // Longer streams
-      CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]
-    )
+    startY: `${Math.random() * -300}%`,
+    speed: `${3 + Math.random() * 4}s`,
+    delay: `${Math.random() * -10}s`,
+    chars: Array.from({ length: len }, () => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]),
+    glowMask: randomGlowMask(len),
   };
 }
 
@@ -59,13 +76,17 @@ export function MatrixBackground({ theme = 'green' }: MatrixBackgroundProps) {
     setColumns(initialColumns);
 
     const interval = setInterval(() => {
-      setColumns(prev => 
-        prev.map(col => 
-          Math.random() < 0.015 ? { // Slightly lower regeneration rate
-            ...generateColumn(col.id),
-            startY: '-300%', // Start higher up
-          } : col
-        )
+      setColumns(prev =>
+        prev.map(col => {
+          // With some probability, fully regenerate the column
+          if (Math.random() < 0.015) {
+            return { ...generateColumn(col.id), startY: '-300%' };
+          }
+          // Otherwise, randomize chars and glowMask in place
+          const newChars = col.chars.map(() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]);
+          const newGlowMask = randomGlowMask(col.chars.length);
+          return { ...col, chars: newChars, glowMask: newGlowMask };
+        })
       );
     }, 100);
 
@@ -89,12 +110,13 @@ export function MatrixBackground({ theme = 'green' }: MatrixBackgroundProps) {
             const color = THEME_COLORS[theme] || THEME_COLORS.green;
             const baseColor = color.base;
             const brightColor = color.bright;
+            const isBright = col.glowMask[i];
             return (
               <span
                 key={i}
-                className={`matrix-character ${i === 0 ? brightColor : baseColor}`}
+                className={`matrix-character ${isBright ? brightColor : baseColor}`}
                 style={{
-                  textShadow: i === 0
+                  textShadow: isBright
                     ? theme === 'green'
                       ? '0 0 8px rgba(74, 222, 128, 0.8), 0 0 12px rgba(74, 222, 128, 0.4)'
                       : theme === 'amber'
