@@ -18,6 +18,8 @@ const THEMES = {
   green: { text: "text-green-400", accent: "text-green-300", caret: "bg-green-400" },
   amber: { text: "text-amber-300", accent: "text-amber-200", caret: "bg-amber-300" },
   mono:  { text: "text-neutral-200", accent: "text-neutral-100", caret: "bg-neutral-200" },
+  blue:  { text: "text-blue-400", accent: "text-blue-300", caret: "bg-blue-400" },
+  red:   { text: "text-red-400", accent: "text-red-300", caret: "bg-red-400" },
 };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -251,8 +253,8 @@ export default function TerminalPortfolio() {
 
   return (
   <div className="relative min-h-screen w-full bg-neutral-900 p-4 md:p-8 flex items-center justify-center overflow-hidden">
-      {background === 'matrix' ? <MatrixBackground /> : <GridBackground />}
-      <BackgroundSwitcher current={background} onChange={setBackground} />
+  {background === 'matrix' ? <MatrixBackground theme={theme} /> : <GridBackground theme={theme} />}
+  <BackgroundSwitcher current={background} onChange={setBackground} theme={theme} />
       {/* Monitor Frame (moved to RetroMonitor for clarity) */}
       <RetroMonitor onClick={() => inputRef.current?.focus()} themeClasses={themeClasses}>
         {/* Screen Content Container (passed as children to RetroMonitor) */}

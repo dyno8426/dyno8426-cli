@@ -27,6 +27,8 @@ const THEMES = {
 	green: { text: "text-green-400", accent: "text-green-300", caret: "bg-green-400" },
 	amber: { text: "text-amber-300", accent: "text-amber-200", caret: "bg-amber-300" },
 	mono:  { text: "text-neutral-200", accent: "text-neutral-100", caret: "bg-neutral-200" },
+	blue:  { text: "text-blue-400", accent: "text-blue-300", caret: "bg-blue-400" },
+	red:   { text: "text-red-400", accent: "text-red-300", caret: "bg-red-400" },
 };
 
 const nowString = () => new Date().toLocaleString();
@@ -100,12 +102,18 @@ export const commands: Record<string, Command> = {
 	photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
 	contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
 	clear: { desc: 'Clear the screen', usage: 'clear', run: async (_cmd, _args, helpers) => { helpers?.clearHistory(); return []; } },
-	theme: { desc: 'Switch theme', usage: 'theme [green|amber|mono]', run: async (_cmd, args=[], helpers) => {
-		const next = (args[0] || '').toLowerCase();
-		if (!Object.keys(THEMES).includes(next)) return [`Unknown theme '${next}'. Available: ${Object.keys(THEMES).join(', ')}`];
-		helpers?.setTheme(next);
-		return [`Theme set to ${next}.`];
-	} },
+	theme: {
+		desc: 'Switch theme',
+		usage: 'theme [green|amber|mono|blue|red]',
+		run: async (_cmd, args = [], helpers) => {
+			const next = (args[0] || '').toLowerCase();
+			if (!Object.keys(THEMES).includes(next)) return [`Unknown theme '${next}'. Available: ${Object.keys(THEMES).join(', ')}`];
+			helpers?.setTheme(next);
+			// Also update background color if helper exists
+			if (helpers?.setBgTheme) helpers.setBgTheme(next);
+			return [`Theme set to ${next}.`];
+		}
+	},
 	banner: { desc: 'ASCII banner', usage: 'banner', run: async () => BANNER_ART.split('\n') },
 	echo: { desc: 'Print text', usage: 'echo <text>', run: async (_cmd, args=[]) => [args.length ? args.join(' ') : ''] },
 	whoami: { desc: 'Print user', usage: 'whoami', run: async () => [PROMPT_USER] },

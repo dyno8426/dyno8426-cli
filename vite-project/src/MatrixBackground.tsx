@@ -31,7 +31,20 @@ function generateColumn(id: number): Column {
   };
 }
 
-export function MatrixBackground() {
+
+interface MatrixBackgroundProps {
+  theme?: 'green' | 'amber' | 'mono' | 'blue' | 'red';
+}
+
+const THEME_COLORS: Record<string, { base: string; bright: string }> = {
+  green: { base: 'text-green-700', bright: 'text-green-400' },
+  amber: { base: 'text-amber-700', bright: 'text-amber-300' },
+  mono: { base: 'text-neutral-700', bright: 'text-neutral-200' },
+  blue: { base: 'text-blue-700', bright: 'text-blue-400' },
+  red: { base: 'text-red-700', bright: 'text-red-400' },
+};
+
+export function MatrixBackground({ theme = 'green' }: MatrixBackgroundProps) {
   const [columns, setColumns] = useState<Column[]>([]);
 
   useEffect(() => {
@@ -72,14 +85,40 @@ export function MatrixBackground() {
             '--delay': col.delay
           } as React.CSSProperties}
         >
-          {col.chars.map((char, i) => (
-            <span
-              key={i}
-              className={`matrix-character ${i === 0 ? 'bright' : ''}`}
-            >
-              {char}
-            </span>
-          ))}
+          {col.chars.map((char, i) => {
+            const color = THEME_COLORS[theme] || THEME_COLORS.green;
+            const baseColor = color.base;
+            const brightColor = color.bright;
+            return (
+              <span
+                key={i}
+                className={`matrix-character ${i === 0 ? brightColor : baseColor}`}
+                style={{
+                  textShadow: i === 0
+                    ? theme === 'green'
+                      ? '0 0 8px rgba(74, 222, 128, 0.8), 0 0 12px rgba(74, 222, 128, 0.4)'
+                      : theme === 'amber'
+                        ? '0 0 8px rgba(253, 230, 138, 0.8), 0 0 12px rgba(253, 230, 138, 0.4)'
+                        : theme === 'blue'
+                          ? '0 0 8px rgba(96, 165, 250, 0.8), 0 0 12px rgba(96, 165, 250, 0.4)'
+                          : theme === 'red'
+                            ? '0 0 8px rgba(248, 113, 113, 0.8), 0 0 12px rgba(248, 113, 113, 0.4)'
+                            : '0 0 8px rgba(229, 231, 235, 0.8), 0 0 12px rgba(229, 231, 235, 0.4)'
+                    : theme === 'green'
+                      ? '0 0 4px rgba(74, 222, 128, 0.3)'
+                      : theme === 'amber'
+                        ? '0 0 4px rgba(253, 230, 138, 0.3)'
+                        : theme === 'blue'
+                          ? '0 0 4px rgba(96, 165, 250, 0.3)'
+                          : theme === 'red'
+                            ? '0 0 4px rgba(248, 113, 113, 0.3)'
+                            : '0 0 4px rgba(229, 231, 235, 0.3)'
+                }}
+              >
+                {char}
+              </span>
+            );
+          })}
         </div>
       ))}
     </div>

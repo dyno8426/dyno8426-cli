@@ -14,9 +14,18 @@ interface GridPoint {
 interface GridBackgroundProps {
   columns?: number;
   rows?: number;
+  theme?: 'green' | 'amber' | 'mono' | 'blue' | 'red';
 }
 
-export function GridBackground({ columns = 40, rows = 25 }: GridBackgroundProps) {
+const THEME_COLORS: Record<string, { base: string; bright: string }> = {
+  green: { base: 'text-green-700', bright: 'text-green-400' },
+  amber: { base: 'text-amber-700', bright: 'text-amber-300' },
+  mono: { base: 'text-neutral-700', bright: 'text-neutral-200' },
+  blue: { base: 'text-blue-700', bright: 'text-blue-400' },
+  red: { base: 'text-red-700', bright: 'text-red-400' },
+};
+
+export function GridBackground({ columns = 40, rows = 25, theme = 'green' }: GridBackgroundProps) {
   const [grid, setGrid] = useState<GridPoint[][]>([]);
 
   // Calculate the number of rows and columns based on viewport and character size
@@ -113,18 +122,40 @@ export function GridBackground({ columns = 40, rows = 25 }: GridBackgroundProps)
             (row || []).map(cell => {
               if (!cell) return null;
               const { id, value, bright } = cell;
+              const color = THEME_COLORS[theme] || THEME_COLORS.green;
+              const baseColor = color.base;
+              const brightColor = color.bright;
+              // Adjust textShadow color for blue/amber/mono
+              let textShadow = '';
+              if (theme === 'green') {
+                textShadow = bright
+                  ? '0 0 8px rgba(74, 222, 128, 0.8), 0 0 12px rgba(74, 222, 128, 0.4)'
+                  : '0 0 4px rgba(74, 222, 128, 0.3)';
+              } else if (theme === 'amber') {
+                textShadow = bright
+                  ? '0 0 8px rgba(253, 230, 138, 0.8), 0 0 12px rgba(253, 230, 138, 0.4)'
+                  : '0 0 4px rgba(253, 230, 138, 0.3)';
+              } else if (theme === 'blue') {
+                textShadow = bright
+                  ? '0 0 8px rgba(96, 165, 250, 0.8), 0 0 12px rgba(96, 165, 250, 0.4)'
+                  : '0 0 4px rgba(96, 165, 250, 0.3)';
+              } else if (theme === 'red') {
+                textShadow = bright
+                  ? '0 0 8px rgba(248, 113, 113, 0.8), 0 0 12px rgba(248, 113, 113, 0.4)'
+                  : '0 0 4px rgba(248, 113, 113, 0.3)';
+              } else {
+                textShadow = bright
+                  ? '0 0 8px rgba(229, 231, 235, 0.8), 0 0 12px rgba(229, 231, 235, 0.4)'
+                  : '0 0 4px rgba(229, 231, 235, 0.3)';
+              }
               return (
                 <div 
                   key={id}
                   className="w-5 h-6 flex items-center justify-center"
                 >
                   <span 
-                    className={`transition-all duration-200 ${bright ? 'text-green-400' : 'text-green-700'}`}
-                    style={{
-                      textShadow: bright 
-                        ? '0 0 8px rgba(74, 222, 128, 0.8), 0 0 12px rgba(74, 222, 128, 0.4)' 
-                        : '0 0 4px rgba(74, 222, 128, 0.3)',
-                    }}
+                    className={`transition-all duration-200 ${bright ? brightColor : baseColor}`}
+                    style={{ textShadow }}
                   >
                     {value}
                   </span>
