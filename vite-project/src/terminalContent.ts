@@ -148,14 +148,11 @@ export const PROJECTS_LINES = [
 ];
 
 export const BOOKS_LINES = [
-  "- Being Mortal — Atul Gawande (notes pending)",
-  "- Invisible Women — Caroline Criado Perez (bias × data)",
-  "- The Emperor of All Maladies — Siddhartha Mukherjee",
+  "🚧 WIP 🏗️",
 ];
 
 export const PHOTOS_LINES = [
-  "Photography journal available in gallery view (GUI mode WIP).",
-  "For now, use 'open https://your-domain.com/photos' to view.",
+  "🚧 WIP 🏗️",
 ];
 
 export const CONTACT_LINES = [
