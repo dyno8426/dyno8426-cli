@@ -134,11 +134,11 @@ export const commands: Record<string, Command> = {
 	} },
 	test: { desc: 'Run self-checks', usage: 'test', run: async (_cmd, _args, helpers) => {
 		const lines: string[] = ['Running self-checks...'];
-		const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✔' : '✖'} ${name}`); };
+	const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✅' : '❌'} ${name}`); };
 		const expected = [
-			'help','about','work','acads','publications','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','content','test'
+			'help','about','work','acads','publications','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests'
 		];
-		assert('command registry present', !!expected.every((k) => k in commands));
+		assert('command registry present', expected.every((k) => k in commands));
 		// Check outputs for new commands
 		const acadsOut = await commands.acads.run('acads', []) as string[];
 		assert('acads returns > 3 lines', Array.isArray(acadsOut) && acadsOut.length > 3);
@@ -151,6 +151,30 @@ export const commands: Record<string, Command> = {
 		assert('banner contains quote', b.join('\n').includes('Upward, not Northward'));
 		const e = await commands.echo.run('echo', ['hello', 'world']) as string[];
 		assert('echo join works', Array.isArray(e) && e[0] === 'hello world');
+		// Test interests command
+		const interestsHelp = await commands.interests.run('interests', ['help']) as string[];
+		assert('interests help returns usage', Array.isArray(interestsHelp) && interestsHelp[0].includes('Usage: interests'));
+		const interestsAll = await commands.interests.run('interests', ['all']) as string[];
+		assert('interests all returns > 5 lines', Array.isArray(interestsAll) && interestsAll.length > 5);
+
+		// Test ndice command
+		const ndiceInvalid = await commands.ndice.run('ndice', ['foo']) as string[];
+		assert('ndice invalid yields usage', Array.isArray(ndiceInvalid) && ndiceInvalid[0].includes('Usage: ndice'));
+		const ndiceValid = await commands.ndice.run('ndice', ['10']) as string[];
+		assert('ndice valid returns number', Array.isArray(ndiceValid) && /^Random number between 0 and 10: \d+$/.test(ndiceValid[0]));
+
+		// Test open command (invalid URL)
+		const openInvalid = await commands.open.run('open', ['not_a_url']) as string[];
+		assert('open invalid yields error', Array.isArray(openInvalid) && openInvalid[0].includes('Invalid URL format'));
+
+		// Test clear command (side effect, should return empty array)
+		const clearOut = await commands.clear.run('clear', [], { clearHistory: () => {} }) as string[];
+		assert('clear returns empty array', Array.isArray(clearOut) && clearOut.length === 0);
+
+		// Test whoami command
+		const whoamiOut = await commands.whoami.run('whoami', []) as string[];
+		assert('whoami returns user', Array.isArray(whoamiOut) && whoamiOut[0] === PROMPT_USER);
+
 		lines.push('Self-checks complete.');
 		return lines;
 	} },
