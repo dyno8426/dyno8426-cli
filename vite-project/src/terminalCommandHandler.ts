@@ -118,8 +118,8 @@ export const commands: Record<string, Command> = {
 	echo: { desc: 'Print text', usage: 'echo <text>', run: async (_cmd, args=[]) => [args.length ? args.join(' ') : ''] },
 	whoami: { desc: 'Print user', usage: 'whoami', run: async () => [PROMPT_USER] },
 	date: { desc: 'Date/time', usage: 'date', run: async () => [nowString()] },
-	open: { desc: 'Open a URL', usage: 'open <url>', run: async (_cmd, args=[]) => {
-		if (!args.length) return ['Usage: open <url>'];
+	open: { desc: 'Open a URL', usage: 'open [url]', run: async (_cmd, args=[]) => {
+		if (!args.length) return ['Usage: open [url]'];
 		const url = args[0];
 		const isValidUrl = /^https?:\/\/.+\..+/.test(url);
 		if (isValidUrl) {
