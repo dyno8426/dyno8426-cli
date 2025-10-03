@@ -47,7 +47,15 @@ Notes:
 - Tailwind configuration is in `vite-project/tailwind.config.js`.
 
 
-5) Build and deploy
+
+5) Netlify Integration & Local Testing
+
+- Dynamic commands (like `books`) use Netlify Functions. To test these locally, use `netlify dev` instead of `npm run dev`.
+- Install Netlify CLI globally if needed: `npm install -g netlify-cli` (use `sudo` if needed).
+- Run `netlify dev` from the project root to serve both frontend and serverless functions.
+- See README.md for more details.
+
+6) Build and deploy
 
 - `npm run build` in `vite-project` creates a production bundle in `vite-project/dist`.
 - For GitHub Pages user site deployment, use the included GitHub Actions workflow (`deploy-to-user-pages.yml`) to publish to the `docs/` folder in your `dyno8426.github.io` repo. Manual copy is also supported.

@@ -20,10 +20,16 @@ Thanks for contributing! A few simple guidelines to keep the project consistent.
 
 
 5) Issues and discussions
-- Open an issue for larger scope work (e.g., extracting the command registry, accessibility improvements, or production deployment tasks).
+	- Open an issue for larger scope work (e.g., extracting the command registry, accessibility improvements, or production deployment tasks).
 
-6) Deployment
-- The recommended deployment workflow is `deploy-to-user-pages.yml`, which publishes the site to the `docs/` folder in your `dyno8426.github.io` repo.
-- The site title is now "Adarsh Chauhan's DYNφTRON 2000" (see `vite-project/index.html`).
+6) Netlify Integration & Local Testing
+	- Dynamic commands (like `books`) use Netlify Functions. To test these locally, use `netlify dev` instead of `npm run dev`.
+	- Install Netlify CLI globally if needed: `npm install -g netlify-cli` (use `sudo` if needed).
+	- Run `netlify dev` from the project root to serve both frontend and serverless functions.
+	- See README.md for more details.
+
+7) Deployment
+	- The recommended deployment workflow is `deploy-to-user-pages.yml`, which publishes the site to the `docs/` folder in your `dyno8426.github.io` repo.
+	- The site title is now "Adarsh Chauhan's DYNφTRON 2000" (see `vite-project/index.html`).
 
 Thank you — contributions make the project better!

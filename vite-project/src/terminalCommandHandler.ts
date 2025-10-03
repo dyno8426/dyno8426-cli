@@ -103,24 +103,29 @@ export const commands: Record<string, Command> = {
 		usage: 'books',
 		run: async () => {
 			try {
-								// Use Netlify function endpoint, configurable for GitHub Pages
-								let endpoint = '/.netlify/functions/goodreads';
-								// Allow override via environment variable (for build-time replacement)
-								// Set VITE_GOODREADS_PROXY_URL in your .env.local for local testing if needed
-												// For GitHub Pages, hardcode your Netlify site URL below:
-												const NETLIFY_URL = 'https://dyno8426-cli.netlify.app/.netlify/functions/goodreads';
-												if (
-													typeof import.meta !== 'undefined' &&
-													typeof import.meta.env !== 'undefined' &&
-													import.meta.env.VITE_GOODREADS_PROXY_URL
-												) {
-													endpoint = import.meta.env.VITE_GOODREADS_PROXY_URL;
-												} else if (
-													typeof window !== 'undefined' &&
-													window.location.hostname.endsWith('github.io')
-												) {
-													endpoint = NETLIFY_URL;
-												}
+				// Use Netlify function endpoint, configurable for GitHub Pages
+				let endpoint = '/.netlify/functions/goodreads';
+				// Allow override via environment variable (for build-time replacement)
+				// Set VITE_GOODREADS_PROXY_URL in your .env.local for local testing if needed
+				// For GitHub Pages, hardcode your Netlify site URL below:
+				const NETLIFY_URL = 'https://dyno8426-cli.netlify.app/.netlify/functions/goodreads';
+				if (
+					typeof import.meta !== 'undefined' &&
+					typeof import.meta.env !== 'undefined' &&
+					import.meta.env.VITE_GOODREADS_PROXY_URL
+				) {
+					endpoint = import.meta.env.VITE_GOODREADS_PROXY_URL;
+				} else if (
+					typeof window !== 'undefined' &&
+					(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+				) {
+					endpoint = 'http://localhost:8888/.netlify/functions/goodreads';
+				} else if (
+					typeof window !== 'undefined' &&
+					window.location.hostname.endsWith('github.io')
+				) {
+					endpoint = NETLIFY_URL;
+				}
 				const res = await fetch(endpoint);
 				if (!res.ok) throw new Error('Failed to fetch review');
 				const data = await res.json();

@@ -6,34 +6,33 @@ Two ways to run:
 - Upload the contents of `cdn-static/` to your `{username}.github.io` repo (or a `/docs` folder on any repo and enable Pages).
 - Open the site — it should work immediately. Tailwind/React are loaded via CDNs.
 
-## 2) **Local dev with Vite + Tailwind**
-```bash
-cd vite-project
-npm install
-# Terminal Portfolio (Vite + CDN versions)
+npm run preview
 
+## 2) **Local dev with Vite + Tailwind + Netlify Functions**
 
-A retro-style terminal portfolio UI built with React + TypeScript + Tailwind. This repository contains both a quick CDN preview and a full local development project powered by Vite. The site title is now "Adarsh Chauhan's DYNφTRON 2000".
+This project uses Netlify Functions for dynamic commands (e.g., the `books` command fetches from a serverless endpoint). To test all features locally, you must use Netlify Dev.
 
-This README documents the project's components, how to run it, where the important source files live, and tips for customization.
-
----
-
-## Quick start
-
-### 1) CDN preview (zero setup)
-- Copy the contents of `cdn-static/` to any static host (GitHub Pages `docs/` or a static CDN) and open `index.html`.
-- This preview uses CDN-hosted React and Tailwind for a fast demo.
-
-### 2) Local development (Vite)
+### Local development (Vite + Netlify Dev)
 
 ```bash
 cd vite-project
 npm install
-npm run dev
-# build for production
+# Start local dev server with Netlify Functions support
+netlify dev
+# open http://localhost:8888
+```
+
+**Note:**
+- `npm run dev` (Vite only) will NOT serve Netlify functions. Use `netlify dev` for full local testing.
+- If you don't have Netlify CLI, install it globally: `npm install -g netlify-cli` (use `sudo` if needed).
+
+### Build for production
+
+```bash
+cd vite-project
 npm run build
 # output: vite-project/dist
+```
 
 Important: do NOT open `vite-project/dist/index.html` directly in your browser using the `file://` protocol. Modern browsers block loading bundled JS/CSS from the filesystem for security reasons (CORS), which will result in a blank page and console errors.
 
@@ -49,6 +48,20 @@ npm run serve-dist
 
 # open http://localhost:5173 (or the printed port)
 ```
+
+
+## Netlify Integration (Dynamic Commands)
+
+This project uses Netlify Functions for dynamic features (e.g., fetching Goodreads reviews for the `books` command). The function code lives in `vite-project/netlify/functions/`.
+
+### Local testing
+- Use `netlify dev` to run both the frontend and serverless functions locally.
+- The books command and any other dynamic features will work exactly as in production.
+
+### Production deployment
+- Netlify will automatically detect and deploy functions from `vite-project/netlify/functions`.
+- The deployed function will be available at `https://<yoursite>.netlify.app/.netlify/functions/goodreads`.
+- The frontend is configured to use the correct endpoint for local, Netlify, and GitHub Pages deployments.
 
 ## Deploying to GitHub Pages (user site)
 
