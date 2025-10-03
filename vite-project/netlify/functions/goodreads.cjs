@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const xml2js = require('xml2js');
 
 // Replace with your Goodreads RSS feed URL or accept as query param
-const GOODREADS_RSS_URL = 'https://www.goodreads.com/review/list_rss/15500921?shelf=read';
+const GOODREADS_RSS_URL = 'https://www.goodreads.com/review/list_rss/30211354?shelf=read';
 
 exports.handler = async function(event, context) {
   try {
