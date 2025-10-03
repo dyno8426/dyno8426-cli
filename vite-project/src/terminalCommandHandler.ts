@@ -151,14 +151,45 @@ export const commands: Record<string, Command> = {
 		desc: 'Randomly recommend a photo from my Unsplash account',
 		usage: 'photosuggestion',
 		run: async () => {
-			// TODO: Integrate Unsplash API for random photo suggestion
-			// See https://unsplash.com/developers for API details
-			// You will need to create a Netlify function or proxy to avoid exposing your API key
-			return [
-				'Here is a random photo suggestion from my Unsplash account:',
-				'🚧 Unsplash integration coming soon! 🚧',
-				'Visit: https://unsplash.com/@dyno8426'
-			];
+			try {
+				let endpoint = '/.netlify/functions/unsplash';
+				const NETLIFY_URL = 'https://dyno8426-cli.netlify.app/.netlify/functions/unsplash';
+				if (
+					typeof import.meta !== 'undefined' &&
+					typeof import.meta.env !== 'undefined' &&
+					import.meta.env.VITE_UNSPLASH_PROXY_URL
+				) {
+					endpoint = import.meta.env.VITE_UNSPLASH_PROXY_URL;
+				} else if (
+					typeof window !== 'undefined' &&
+					(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+				) {
+					endpoint = 'http://localhost:8888/.netlify/functions/unsplash';
+				} else if (
+					typeof window !== 'undefined' &&
+					window.location.hostname.endsWith('github.io')
+				) {
+					endpoint = NETLIFY_URL;
+				}
+				const res = await fetch(endpoint);
+				if (!res.ok) throw new Error('Failed to fetch photo');
+				const data = await res.json();
+				if (!data || !data.url) throw new Error('No photo data received');
+				const lines = [
+					'Here is a random photo suggestion from my Unsplash account:',
+					data.description ? `*${data.description}*` : '',
+					data.url ? `![Unsplash Photo](${data.url})` : '',
+					data.link ? `[View on Unsplash](${data.link})` : '',
+					data.author ? `By: ${data.author} (@${data.author_username})` : '',
+					data.created_at ? `Date: ${data.created_at}` : ''
+				].filter(Boolean);
+				return lines.length ? lines : ['No photo found.'];
+			} catch (err: any) {
+				if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
+					return ['Could not fetch a random photo.', 'Network error: Unable to reach the server.'];
+				}
+				return ['Could not fetch a random photo.', err?.message || String(err)];
+			}
 		}
 	},
 	contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
