@@ -13,7 +13,7 @@ export const HELP_LINES = [
   "  publications   → Research papers & patents",
   "  projects       → Selected projects",
   "  booksuggestion → Random book recommendation",
-  "  photos         → Photo journal info",
+  "  photosuggestion→ Random photo suggestion",
   "  contact        → Reach me",
   "  clear          → Clear the screen",
   "  theme [name]   → Switch theme [green|amber|mono]",
@@ -152,8 +152,9 @@ export const BOOKS_LINES = [
   "Use the 'booksuggestion' command to get a random book recommendation from my Goodreads read shelf.",
 ];
 
+// Deprecated: PHOTOS_LINES is no longer used. Use photosuggestion command instead.
 export const PHOTOS_LINES = [
-  "🚧 WIP 🏗️",
+  "Use the 'photosuggestion' command to get a random photo suggestion from my Unsplash account.",
 ];
 
 export const CONTACT_LINES = [

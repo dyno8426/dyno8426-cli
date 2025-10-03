@@ -147,7 +147,20 @@ export const commands: Record<string, Command> = {
 				}
 			}
 		},
-	photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
+	photosuggestion: {
+		desc: 'Randomly recommend a photo from my Unsplash account',
+		usage: 'photosuggestion',
+		run: async () => {
+			// TODO: Integrate Unsplash API for random photo suggestion
+			// See https://unsplash.com/developers for API details
+			// You will need to create a Netlify function or proxy to avoid exposing your API key
+			return [
+				'Here is a random photo suggestion from my Unsplash account:',
+				'🚧 Unsplash integration coming soon! 🚧',
+				'Visit: https://unsplash.com/@dyno8426'
+			];
+		}
+	},
 	contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
 	clear: { desc: 'Clear the screen', usage: 'clear', run: async (_cmd, _args, helpers) => { helpers?.clearHistory(); return []; } },
 	theme: {
@@ -184,7 +197,7 @@ export const commands: Record<string, Command> = {
 		const lines: string[] = ['Running self-checks...'];
 	const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✅' : '❌'} ${name}`); };
 		const expected = [
-			'help','about','work','acads','publications','projects','booksuggestion','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests'
+			'help','about','work','acads','publications','projects','booksuggestion','photosuggestion','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests'
 		];
 		assert('command registry present', expected.every((k) => k in commands));
 		// Check outputs for new commands
@@ -227,6 +240,12 @@ export const commands: Record<string, Command> = {
 		if ('booksuggestion' in commands) {
 			const bookOut = await commands.booksuggestion.run('booksuggestion', []) as string[];
 			assert('booksuggestion returns at least 1 line', Array.isArray(bookOut) && bookOut.length > 0);
+		}
+
+		// Test photosuggestion command
+		if ('photosuggestion' in commands) {
+			const photoOut = await commands.photosuggestion.run('photosuggestion', []) as string[];
+			assert('photosuggestion returns at least 1 line', Array.isArray(photoOut) && photoOut.length > 0);
 		}
 
 		lines.push('Self-checks complete.');
