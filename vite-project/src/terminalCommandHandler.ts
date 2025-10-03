@@ -98,7 +98,37 @@ export const commands: Record<string, Command> = {
 	acads: { desc: 'Education background', usage: 'acads', run: async () => ACADS_LINES },
 	publications: { desc: 'Research papers & patents', usage: 'publications', run: async () => PUBLICATIONS_LINES },
 	projects: { desc: 'Selected projects', usage: 'projects', run: async () => PROJECTS_LINES },
-	books: { desc: 'Recent book notes', usage: 'books', run: async () => BOOKS_LINES },
+	books: {
+		desc: 'Recent book notes',
+		usage: 'books',
+		run: async () => {
+			try {
+				// Use Netlify function endpoint
+				let endpoint = '/.netlify/functions/goodreads';
+				// If running on GitHub Pages, use full Netlify URL
+				if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+				  endpoint = 'https://<your-netlify-site>.netlify.app/.netlify/functions/goodreads';
+				}
+				const res = await fetch(endpoint);
+				if (!res.ok) throw new Error('Failed to fetch review');
+				const data = await res.json();
+				// Format the review for terminal output
+				const lines = [
+					`**${data.title}** by ${data.author || 'Unknown author'}`,
+					data.book ? `Book: ${data.book}` : '',
+					data.rating ? `Your rating: ${data.rating}` : '',
+					data.pubDate ? `Date: ${data.pubDate}` : '',
+					'',
+					data.description ? data.description.replace(/<[^>]+>/g, '').trim() : '',
+					'',
+					data.link ? `[Read on Goodreads](${data.link})` : ''
+				].filter(Boolean);
+				return lines;
+			} catch (err: any) {
+				return ['Could not fetch a random book review.', err?.message || String(err)];
+			}
+		}
+	},
 	photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
 	contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
 	clear: { desc: 'Clear the screen', usage: 'clear', run: async (_cmd, _args, helpers) => { helpers?.clearHistory(); return []; } },
