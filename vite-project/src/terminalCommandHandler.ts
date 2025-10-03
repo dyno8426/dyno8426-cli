@@ -103,10 +103,12 @@ export const commands: Record<string, Command> = {
 		usage: 'books',
 		run: async () => {
 			try {
-				// Use Netlify function endpoint
+				// Use Netlify function endpoint, configurable for GitHub Pages
 				let endpoint = '/.netlify/functions/goodreads';
-				// If running on GitHub Pages, use full Netlify URL
-				if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+				// Allow override via environment variable (for build-time replacement)
+				if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GOODREADS_PROXY_URL) {
+				  endpoint = import.meta.env.VITE_GOODREADS_PROXY_URL;
+				} else if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
 				  endpoint = 'https://<your-netlify-site>.netlify.app/.netlify/functions/goodreads';
 				}
 				const res = await fetch(endpoint);

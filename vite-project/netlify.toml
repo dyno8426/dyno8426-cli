@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "vite-project/netlify/functions"
+
+# Optional: Redirect API calls to Netlify Functions in production
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
