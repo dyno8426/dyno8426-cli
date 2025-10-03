@@ -98,54 +98,54 @@ export const commands: Record<string, Command> = {
 	acads: { desc: 'Education background', usage: 'acads', run: async () => ACADS_LINES },
 	publications: { desc: 'Research papers & patents', usage: 'publications', run: async () => PUBLICATIONS_LINES },
 	projects: { desc: 'Selected projects', usage: 'projects', run: async () => PROJECTS_LINES },
-	books: {
-		desc: 'Recent book notes',
-		usage: 'books',
-		run: async () => {
-			try {
-				let endpoint = '/.netlify/functions/goodreads';
-				const NETLIFY_URL = 'https://dyno8426-cli.netlify.app/.netlify/functions/goodreads';
-				if (
-					typeof import.meta !== 'undefined' &&
-					typeof import.meta.env !== 'undefined' &&
-					import.meta.env.VITE_GOODREADS_PROXY_URL
-				) {
-					endpoint = import.meta.env.VITE_GOODREADS_PROXY_URL;
-				} else if (
-					typeof window !== 'undefined' &&
-					(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-				) {
-					endpoint = 'http://localhost:8888/.netlify/functions/goodreads';
-				} else if (
-					typeof window !== 'undefined' &&
-					window.location.hostname.endsWith('github.io')
-				) {
-					endpoint = NETLIFY_URL;
+		booksuggestion: {
+			desc: 'Randomly recommend a book from my Goodreads read shelf',
+			usage: 'booksuggestion',
+			run: async () => {
+				try {
+					let endpoint = '/.netlify/functions/goodreads';
+					const NETLIFY_URL = 'https://dyno8426-cli.netlify.app/.netlify/functions/goodreads';
+					if (
+						typeof import.meta !== 'undefined' &&
+						typeof import.meta.env !== 'undefined' &&
+						import.meta.env.VITE_GOODREADS_PROXY_URL
+					) {
+						endpoint = import.meta.env.VITE_GOODREADS_PROXY_URL;
+					} else if (
+						typeof window !== 'undefined' &&
+						(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+					) {
+						endpoint = 'http://localhost:8888/.netlify/functions/goodreads';
+					} else if (
+						typeof window !== 'undefined' &&
+						window.location.hostname.endsWith('github.io')
+					) {
+						endpoint = NETLIFY_URL;
+					}
+					const res = await fetch(endpoint);
+					if (!res.ok) throw new Error('Failed to fetch review');
+					const data = await res.json();
+					if (!data || !data.title) throw new Error('No review data received');
+					// Format the review for terminal output, handle missing fields gracefully
+					const lines = [
+						`**${data.title}**${data.author ? ' by ' + data.author : ''}`,
+						data.book ? `Book: ${data.book}` : '',
+						data.rating ? `Your rating: ${data.rating}` : '',
+						data.pubDate ? `Date: ${data.pubDate}` : '',
+						'',
+						data.description ? data.description.replace(/<[^>]+>/g, '').trim() : '',
+						'',
+						data.link ? `[Read on Goodreads](${data.link})` : ''
+					].filter(Boolean);
+					return lines.length ? lines : ['No review found.'];
+				} catch (err: any) {
+					if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
+						return ['Could not fetch a random book review.', 'Network error: Unable to reach the server.'];
+					}
+					return ['Could not fetch a random book review.', err?.message || String(err)];
 				}
-				const res = await fetch(endpoint);
-				if (!res.ok) throw new Error('Failed to fetch review');
-				const data = await res.json();
-				if (!data || !data.title) throw new Error('No review data received');
-				// Format the review for terminal output, handle missing fields gracefully
-				const lines = [
-					`**${data.title}**${data.author ? ' by ' + data.author : ''}`,
-					data.book ? `Book: ${data.book}` : '',
-					data.rating ? `Your rating: ${data.rating}` : '',
-					data.pubDate ? `Date: ${data.pubDate}` : '',
-					'',
-					data.description ? data.description.replace(/<[^>]+>/g, '').trim() : '',
-					'',
-					data.link ? `[Read on Goodreads](${data.link})` : ''
-				].filter(Boolean);
-				return lines.length ? lines : ['No review found.'];
-			} catch (err: any) {
-				if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
-					return ['Could not fetch a random book review.', 'Network error: Unable to reach the server.'];
-				}
-				return ['Could not fetch a random book review.', err?.message || String(err)];
 			}
-		}
-	},
+		},
 	photos: { desc: 'Photo journal info', usage: 'photos', run: async () => PHOTOS_LINES },
 	contact: { desc: 'How to reach me', usage: 'contact', run: async () => CONTACT_LINES },
 	clear: { desc: 'Clear the screen', usage: 'clear', run: async (_cmd, _args, helpers) => { helpers?.clearHistory(); return []; } },
@@ -183,7 +183,7 @@ export const commands: Record<string, Command> = {
 		const lines: string[] = ['Running self-checks...'];
 	const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✅' : '❌'} ${name}`); };
 		const expected = [
-			'help','about','work','acads','publications','projects','books','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests'
+			'help','about','work','acads','publications','projects','booksuggestion','photos','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests'
 		];
 		assert('command registry present', expected.every((k) => k in commands));
 		// Check outputs for new commands
@@ -221,6 +221,12 @@ export const commands: Record<string, Command> = {
 		// Test whoami command
 		const whoamiOut = await commands.whoami.run('whoami', []) as string[];
 		assert('whoami returns user', Array.isArray(whoamiOut) && whoamiOut[0] === PROMPT_USER);
+
+		// Test booksuggestion command
+		if ('booksuggestion' in commands) {
+			const bookOut = await commands.booksuggestion.run('booksuggestion', []) as string[];
+			assert('booksuggestion returns at least 1 line', Array.isArray(bookOut) && bookOut.length > 0);
+		}
 
 		lines.push('Self-checks complete.');
 		return lines;

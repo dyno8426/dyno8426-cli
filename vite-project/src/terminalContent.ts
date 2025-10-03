@@ -12,7 +12,7 @@ export const HELP_LINES = [
   "  acads          → Education background",
   "  publications   → Research papers & patents",
   "  projects       → Selected projects",
-  "  books          → Recent book notes",
+  "  booksuggestion → Random book recommendation",
   "  photos         → Photo journal info",
   "  contact        → Reach me",
   "  clear          → Clear the screen",
@@ -147,8 +147,9 @@ export const PROJECTS_LINES = [
   "  Github link: https://github.com/dyno8426/dyno8426-cli",
 ];
 
+// Deprecated: BOOKS_LINES is no longer used. Use booksuggestion command instead.
 export const BOOKS_LINES = [
-  "🚧 WIP 🏗️",
+  "Use the 'booksuggestion' command to get a random book recommendation from my Goodreads read shelf.",
 ];
 
 export const PHOTOS_LINES = [
