@@ -128,6 +128,7 @@ export const commands: Record<string, Command> = {
 					if (!data || !data.title) throw new Error('No review data received');
 					// Format the review for terminal output, handle missing fields gracefully
 					const lines = [
+						'Here is a random suggestion from my Goodreads read shelf:',
 						`**${data.title}**${data.author ? ' by ' + data.author : ''}`,
 						data.book ? `Book: ${data.book}` : '',
 						data.rating ? `Your rating: ${data.rating}` : '',
