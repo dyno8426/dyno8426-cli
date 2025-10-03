@@ -103,11 +103,7 @@ export const commands: Record<string, Command> = {
 		usage: 'books',
 		run: async () => {
 			try {
-				// Use Netlify function endpoint, configurable for GitHub Pages
 				let endpoint = '/.netlify/functions/goodreads';
-				// Allow override via environment variable (for build-time replacement)
-				// Set VITE_GOODREADS_PROXY_URL in your .env.local for local testing if needed
-				// For GitHub Pages, hardcode your Netlify site URL below:
 				const NETLIFY_URL = 'https://dyno8426-cli.netlify.app/.netlify/functions/goodreads';
 				if (
 					typeof import.meta !== 'undefined' &&
@@ -129,9 +125,10 @@ export const commands: Record<string, Command> = {
 				const res = await fetch(endpoint);
 				if (!res.ok) throw new Error('Failed to fetch review');
 				const data = await res.json();
-				// Format the review for terminal output
+				if (!data || !data.title) throw new Error('No review data received');
+				// Format the review for terminal output, handle missing fields gracefully
 				const lines = [
-					`**${data.title}** by ${data.author || 'Unknown author'}`,
+					`**${data.title}**${data.author ? ' by ' + data.author : ''}`,
 					data.book ? `Book: ${data.book}` : '',
 					data.rating ? `Your rating: ${data.rating}` : '',
 					data.pubDate ? `Date: ${data.pubDate}` : '',
@@ -140,8 +137,11 @@ export const commands: Record<string, Command> = {
 					'',
 					data.link ? `[Read on Goodreads](${data.link})` : ''
 				].filter(Boolean);
-				return lines;
+				return lines.length ? lines : ['No review found.'];
 			} catch (err: any) {
+				if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
+					return ['Could not fetch a random book review.', 'Network error: Unable to reach the server.'];
+				}
 				return ['Could not fetch a random book review.', err?.message || String(err)];
 			}
 		}
