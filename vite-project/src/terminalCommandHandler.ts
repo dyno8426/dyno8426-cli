@@ -287,48 +287,79 @@ export const commands: Record<string, Command> = {
 		usage: 'visitors',
 		run: async () => {
 			try {
-				// Check local storage for visitor data
+				// Single source of truth: localStorage
 				const storageKey = 'dyno8426-portfolio-visits';
-				const storedData = localStorage.getItem(storageKey);
-				const data = storedData ? JSON.parse(storedData) : { count: 0, sessions: [] };
-				
 				const sessionKey = 'dyno8426-session-id';
+				
+				// Get current session
 				const currentSession = sessionStorage.getItem(sessionKey);
+				
+				// Get visit data
+				const storedData = localStorage.getItem(storageKey);
+				let data;
+				
+				if (storedData) {
+					try {
+						data = JSON.parse(storedData);
+						if (!data.count || !Array.isArray(data.sessions)) {
+							throw new Error('Invalid data structure');
+						}
+					} catch (parseError) {
+						data = { count: 0, sessions: [] };
+					}
+				} else {
+					data = { count: 0, sessions: [] };
+				}
 				
 				const lines = [
 					'Website Visit Statistics:',
 					`Total visits: ${data.count.toLocaleString()}`,
-					`Session ID: ${currentSession || 'New session'}`,
+					`Current session: ${currentSession ? currentSession.substring(0, 20) + '...' : 'None'}`,
 					'',
-					'Statistics Details:',
+					'Counter Details:',
 					`• Unique sessions tracked: ${data.sessions?.length || 0}`,
-					`• Current session: ${currentSession ? 'Returning' : 'New visitor'}`,
+					`• Storage key: ${storageKey}`,
+					`• Session type: ${currentSession ? 'Returning visitor' : 'New session'}`,
 					'',
-					'Notes:',
-					'• Counter tracks unique browser sessions',
-					'• Data stored locally (privacy-friendly)',
-					'• Visit count increments once per session',
-					'• Asterisk (*) in footer indicates local counter'
+					'How it works:',
+					'• Each new browser session increments the counter once',
+					'• Page refreshes within the same session don\'t increment',
+					'• Data persists across browser restarts',
+					'• Counter is monotonically increasing (never decreases)',
+					'• Uses localStorage for reliable, privacy-friendly tracking'
 				];
 				
 				if (data.sessions && data.sessions.length > 0) {
 					const lastSession = data.sessions[data.sessions.length - 1];
-					const lastVisit = new Date(lastSession.timestamp);
-					lines.push(`• Last visit: ${lastVisit.toLocaleString()}`);
+					if (lastSession && lastSession.timestamp) {
+						const lastVisit = new Date(lastSession.timestamp);
+						lines.push(`• Last recorded visit: ${lastVisit.toLocaleString()}`);
+					}
+					
+					// Show session history summary
+					const recentSessions = data.sessions.slice(-5);
+					if (recentSessions.length > 0) {
+						lines.push('', 'Recent Sessions:');
+						recentSessions.forEach((session: any, index: number) => {
+							const date = new Date(session.timestamp);
+							const sessionNum = data.sessions.length - recentSessions.length + index + 1;
+							lines.push(`  ${sessionNum}. ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`);
+						});
+					}
 				}
 				
 				return lines;
 			} catch (err: any) {
 				return [
 					'Visitor Counter Information:',
-					'Status: Local storage counter active',
+					'Status: Error accessing counter data',
 					'',
-					'The visitor counter uses browser local storage to track visits.',
-					'This provides a privacy-friendly way to count sessions without',
-					'requiring external services or tracking cookies.',
+					'The visitor counter uses browser localStorage for tracking.',
+					'Each unique browser session increments the counter once.',
 					'',
-					'Each new browser session increments the counter once.',
-					`Error details: ${err?.message || 'Unknown error'}`
+					`Error: ${err?.message || 'Unknown error'}`,
+					'',
+					'To reset the counter, clear your browser\'s localStorage.'
 				];
 			}
 		}
