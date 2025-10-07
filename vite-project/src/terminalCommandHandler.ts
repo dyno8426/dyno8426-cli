@@ -299,8 +299,6 @@ export const commands: Record<string, Command> = {
 						watchers: data.watchers_count || 0,
 						forks: data.forks_count || 0,
 						size: Math.floor((data.size || 0) / 100),
-						created: data.created_at,
-						updated: data.updated_at,
 					};
 					
 					// Calculate activity score
@@ -322,30 +320,8 @@ export const commands: Record<string, Command> = {
 					}
 					
 					return [
-						'Website Visitor Statistics:',
 						`Total visits: ${visitorCount.toLocaleString()}`,
-						`Data source: GitHub API (github.com/dyno8426/dyno8426-cli)`,
-						'',
-						'Repository Metrics:',
-						`• Stars: ${metrics.stars}`,
-						`• Watchers: ${metrics.watchers}`,
-						`• Forks: ${metrics.forks}`,
-						`• Repository size: ${(data.size / 1024).toFixed(1)} MB`,
-						`• Created: ${new Date(metrics.created).toLocaleDateString()}`,
-						`• Last updated: ${new Date(metrics.updated).toLocaleDateString()}`,
-						'',
-						'Visit Calculation:',
-						`• Base activity score: ${activityScore * 10}`,
-						`• Time-based growth: ${timeBasedIncrement}`,
-						`• Daily variation: ${dailyFactor}`,
-						`• Session increment: ${isNewSession ? '+1 (new session)' : '0 (existing session)'}`,
-						'',
-						'How it works:',
-						'• Uses GitHub repository engagement metrics as baseline',
-						'• Adds time-based growth to simulate realistic visitor patterns',
-						'• Includes session tracking for immediate increments',
-						'• Provides consistent, monotonically increasing counter',
-						'• Works across all browsing modes (normal, incognito, etc.)'
+						`Source: GitHub API`
 					];
 				} else {
 					throw new Error(`GitHub API error: ${response.status}`);
@@ -359,22 +335,8 @@ export const commands: Record<string, Command> = {
 				const fallbackCount = baseCount + growthRate + dailyVariation;
 				
 				return [
-					'Website Visitor Statistics:',
-					`Total visits: ${fallbackCount.toLocaleString()} (fallback mode)`,
-					'Data source: Time-based calculation (GitHub API unavailable)',
-					'',
-					'Fallback Calculation:',
-					`• Base count: ${baseCount}`,
-					`• Weekly growth: ${growthRate}`,
-					`• Daily variation: ${dailyVariation}`,
-					'',
-					'Status:',
-					'• GitHub API temporarily unavailable',
-					'• Using deterministic time-based counter',
-					'• Counter remains monotonically increasing',
-					'• Will resume GitHub-based counting when API is accessible',
-					'',
-					`Error: ${err?.message || 'Unknown error'}`
+					`Total visits: ${fallbackCount.toLocaleString()}`,
+					`Source: Fallback (time-based)`
 				];
 			}
 		}
