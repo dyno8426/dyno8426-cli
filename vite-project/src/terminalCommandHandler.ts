@@ -287,39 +287,48 @@ export const commands: Record<string, Command> = {
 		usage: 'visitors',
 		run: async () => {
 			try {
-				const response = await fetch('https://api.countapi.xyz/get/dyno8426.github.io/portfolio');
+				// Check local storage for visitor data
+				const storageKey = 'dyno8426-portfolio-visits';
+				const storedData = localStorage.getItem(storageKey);
+				const data = storedData ? JSON.parse(storedData) : { count: 0, sessions: [] };
 				
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
+				const sessionKey = 'dyno8426-session-id';
+				const currentSession = sessionStorage.getItem(sessionKey);
 				
-				const data = await response.json();
-				
-				if (data.value !== undefined) {
-					return [
-						'Website Visitor Statistics:',
-						`Total visitors: ${data.value.toLocaleString()}`,
-						'',
-						'This counter tracks unique visits to dyno8426.github.io',
-						'Powered by countapi.xyz'
-					];
-				} else {
-					throw new Error('Invalid response format');
-				}
-			} catch (err: any) {
-				if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
-					return [
-						'Could not fetch visitor count.',
-						'Network error: Unable to reach the counter API.',
-						'',
-						'The visitor counter is displayed in the footer when available.'
-					];
-				}
-				return [
-					'Could not fetch visitor count.',
-					`Error: ${err?.message || String(err)}`,
+				const lines = [
+					'Website Visit Statistics:',
+					`Total visits: ${data.count.toLocaleString()}`,
+					`Session ID: ${currentSession || 'New session'}`,
 					'',
-					'The visitor counter is displayed in the footer when available.'
+					'Statistics Details:',
+					`• Unique sessions tracked: ${data.sessions?.length || 0}`,
+					`• Current session: ${currentSession ? 'Returning' : 'New visitor'}`,
+					'',
+					'Notes:',
+					'• Counter tracks unique browser sessions',
+					'• Data stored locally (privacy-friendly)',
+					'• Visit count increments once per session',
+					'• Asterisk (*) in footer indicates local counter'
+				];
+				
+				if (data.sessions && data.sessions.length > 0) {
+					const lastSession = data.sessions[data.sessions.length - 1];
+					const lastVisit = new Date(lastSession.timestamp);
+					lines.push(`• Last visit: ${lastVisit.toLocaleString()}`);
+				}
+				
+				return lines;
+			} catch (err: any) {
+				return [
+					'Visitor Counter Information:',
+					'Status: Local storage counter active',
+					'',
+					'The visitor counter uses browser local storage to track visits.',
+					'This provides a privacy-friendly way to count sessions without',
+					'requiring external services or tracking cookies.',
+					'',
+					'Each new browser session increments the counter once.',
+					`Error details: ${err?.message || 'Unknown error'}`
 				];
 			}
 		}
