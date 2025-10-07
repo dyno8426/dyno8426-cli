@@ -228,7 +228,7 @@ export const commands: Record<string, Command> = {
 		const lines: string[] = ['Running self-checks...'];
 	const assert = (name: string, ok: boolean) => { lines.push(`${ok ? '✅' : '❌'} ${name}`); };
 		const expected = [
-			'help','about','work','acads','publications','projects','booksuggestion','photosuggestion','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests'
+			'help','about','work','acads','publications','projects','booksuggestion','photosuggestion','contact','clear','theme','banner','echo','whoami','date','open','sudo','test','ndice','interests','visitors'
 		];
 		assert('command registry present', expected.every((k) => k in commands));
 		// Check outputs for new commands
@@ -282,6 +282,48 @@ export const commands: Record<string, Command> = {
 		lines.push('Self-checks complete.');
 		return lines;
 	} },
+	visitors: {
+		desc: 'Show current website visitor count',
+		usage: 'visitors',
+		run: async () => {
+			try {
+				const response = await fetch('https://api.countapi.xyz/get/dyno8426.github.io/portfolio');
+				
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				
+				const data = await response.json();
+				
+				if (data.value !== undefined) {
+					return [
+						'Website Visitor Statistics:',
+						`Total visitors: ${data.value.toLocaleString()}`,
+						'',
+						'This counter tracks unique visits to dyno8426.github.io',
+						'Powered by countapi.xyz'
+					];
+				} else {
+					throw new Error('Invalid response format');
+				}
+			} catch (err: any) {
+				if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
+					return [
+						'Could not fetch visitor count.',
+						'Network error: Unable to reach the counter API.',
+						'',
+						'The visitor counter is displayed in the footer when available.'
+					];
+				}
+				return [
+					'Could not fetch visitor count.',
+					`Error: ${err?.message || String(err)}`,
+					'',
+					'The visitor counter is displayed in the footer when available.'
+				];
+			}
+		}
+	},
 };
 
 export async function executeCommand(raw: string, helpers?: any) {

@@ -6,6 +6,7 @@ import { MatrixBackground } from './MatrixBackground';
 import { GridBackground } from './GridBackground';
 import { BackgroundSwitcher } from './BackgroundSwitcher';
 import RetroMonitor from './RetroMonitor';
+import VisitorCounter from './VisitorCounter';
 // Static terminal content separated for readability and easy edits
 import { PROMPT_USER as PC_PROMPT_USER, PROMPT_HOST as PC_PROMPT_HOST } from './terminalContent';
 import { commands, executeCommand } from './terminalCommandHandler';
@@ -353,7 +354,11 @@ Welcome to ${PROMPT_USER}@${PROMPT_HOST}. Type 'help' to begin.`}</pre>
         </div>
       </RetroMonitor>
       <footer className="fixed bottom-2 left-0 w-full text-xs text-neutral-400 text-center select-none pointer-events-none z-50">
-        © 2025 Adarsh Chauhan. All Rights Reserved.
+        <div className="flex justify-between items-center px-4">
+          <VisitorCounter theme={theme} />
+          <div>© 2025 Adarsh Chauhan. All Rights Reserved.</div>
+          <div className="w-20"></div> {/* Spacer for balance */}
+        </div>
       </footer>
     </div>
   );

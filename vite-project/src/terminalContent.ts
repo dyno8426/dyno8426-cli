@@ -15,6 +15,7 @@ export const HELP_LINES = [
   "  booksuggestion   → Random book recommendation",
   "  photosuggestion  → Random photo suggestion",
   "  contact          → Reach me",
+  "  visitors         → Show website visitor count",
   "  clear            → Clear the screen",
   "  theme [name]     → Switch theme [green|amber|mono]",
   "  banner           → Show ASCII banner",
