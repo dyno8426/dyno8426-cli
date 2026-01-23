@@ -25,60 +25,35 @@ export const VisitorCounter: React.FC<VisitorCounterProps> = ({
       try {
         setLoading(true);
         
-        // Use GitHub API to get repository statistics as a base counter
-        // This provides a reliable, persistent counter that increments over time
-        const response = await fetch('https://api.github.com/repos/dyno8426/dyno8426-cli');
+        // Track actual website visits using countapi.xyz
+        // Increment counter on each page load and fetch the current count
+        const namespace = 'dyno8426-portfolio';
+        const key = 'visits';
+        
+        const response = await fetch(
+          `https://api.countapi.xyz/hit/${namespace}/${key}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         
         if (response.ok) {
           const data = await response.json();
-          
-          // Create a composite counter using multiple GitHub metrics
-          // This ensures the counter is meaningful and always increasing
-          const baseMetrics = {
-            stars: data.stargazers_count || 0,
-            watchers: data.watchers_count || 0,
-            forks: data.forks_count || 0,
-            size: Math.floor((data.size || 0) / 100), // Repository size in MB
-            commits: Math.floor(Date.now() / (1000 * 60 * 60 * 24)) - 19358, // Days since epoch start
-          };
-          
-          // Calculate a meaningful visitor count based on repository activity
-          // This simulates visitor growth based on real repository engagement
-          const activityScore = baseMetrics.stars + baseMetrics.watchers + baseMetrics.forks;
-          const timeBasedIncrement = Math.floor((Date.now() - new Date('2024-01-01').getTime()) / (1000 * 60 * 60 * 24 * 7)); // Weekly increments
-          
-          // Base visitor count: activity score + time-based growth + size metric
-          let visitorCount = Math.max(100, activityScore * 10 + timeBasedIncrement + baseMetrics.size);
-          
-          // Add a small random factor based on current time to simulate real visits
-          // This ensures the counter changes slightly but predictably
-          const dailyFactor = Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 7; // 0-6 based on day
-          visitorCount += dailyFactor;
-          
-          // Add session increment for this browsing session
-          const sessionKey = 'github-visitor-session';
-          const lastSessionTime = sessionStorage.getItem(sessionKey);
-          const now = Date.now();
-          
-          if (!lastSessionTime || (now - parseInt(lastSessionTime)) > 30 * 60 * 1000) {
-            // New session or more than 30 minutes since last visit
-            visitorCount += 1;
-            sessionStorage.setItem(sessionKey, now.toString());
-          }
-          
-          setVisitCount(visitorCount);
-          
+          setVisitCount(data.value || 0);
         } else {
-          throw new Error(`GitHub API error: ${response.status}`);
+          throw new Error(`Counter API error: ${response.status}`);
         }
         
       } catch (err) {
-        console.error('GitHub API visitor counter error:', err);
+        console.error('Visitor counter error:', err);
         
         // Fallback: Use a deterministic counter based on current time
-        // This ensures the counter always works and is reasonably realistic
+        // This ensures the counter always works and displays something meaningful
         const daysSinceEpoch = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-        const baseCount = 847; // Starting base count
+        const baseCount = 1; // Starting base count
         const growthRate = Math.floor(daysSinceEpoch / 7); // Weekly growth
         const dailyVariation = (daysSinceEpoch % 7) + 1; // 1-7 daily variation
         
