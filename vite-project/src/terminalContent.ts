@@ -146,6 +146,22 @@ export const PROJECTS_LINES = [
   "  I think of these genAI products like any collaborator engineer, and a really good collaborator at that. Sure, it can misinterpret its sources and/or my instructions, or get stuck in a eddy of non-progressive attempts. But that's what I am here to guide and course-correct it for. My native expertise about coding and software best practices knows not to accept any random code at face value. This collaboration will only make the actor using these agentic tools more creative, capable and free to think and solve for higher, more abstract level problems, like performance and organizational improvements to their web application projects. And it is very encouraging once you get the rhythm of guiding the genAI agent to produce meaningful results. It got me thinking and coming back with more and more feature enrichment that I wanted to do for my website project. This just gave me the courage and excitement to go for more projectifying more ideas that I would not have done without these genAI tools due to the daunting nature of a steep learning curve and unfamiliarity that any new technology brings. So, I think there will be more genAI assisted projects that I look forward to creating and showcasing.",
   "  ",
   "  Github link: https://github.com/dyno8426/dyno8426-cli",
+  "",
+  "- mortgage-refinance-tipping-point:",
+  "  A financial analysis tool to help homeowners determine their optimal mortgage refinancing strategy. Built with Python and data science methodologies.",
+  "  ",
+  "  This tool calculates break-even points for refinancing decisions by analyzing multiple scenarios: interest rate reduction, closing costs, loan duration changes, and market conditions. It uses Monte Carlo simulations to account for uncertainty in future interest rates and home values, providing probability-weighted recommendations.",
+  "  ",
+  "  Features include:",
+  "  • Interactive scenario analysis comparing fixed vs. variable rates",
+  "  • Break-even timeline visualization",
+  "  • Cost-benefit analysis with detailed amortization schedules",
+  "  • Risk assessment under different market conditions",
+  "  • Export reports for comparing refinancing offers",
+  "  ",
+  "  The project demonstrates practical application of financial mathematics, statistical modeling, and data visualization to solve real-world personal finance problems.",
+  "  ",
+  "  Github link: https://github.com/dyno8426/mortgage-refinance-tipping-point",
 ];
 
 // Deprecated: BOOKS_LINES is no longer used. Use booksuggestion command instead.
