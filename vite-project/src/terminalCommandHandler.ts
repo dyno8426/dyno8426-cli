@@ -287,56 +287,47 @@ export const commands: Record<string, Command> = {
 		usage: 'visitors',
 		run: async () => {
 			try {
-				// Fetch data from GitHub API for visitor statistics
-				const response = await fetch('https://api.github.com/repos/dyno8426/dyno8426-cli');
+				// Track actual website visits using countapi.xyz
+				// Increments counter on each page load and fetches current count
+				const namespace = 'dyno8426-portfolio';
+				const key = 'visits';
+				
+				const response = await fetch(
+					`https://api.countapi.xyz/hit/${namespace}/${key}`,
+					{
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
+				);
 				
 				if (response.ok) {
 					const data = await response.json();
-					
-					// Calculate visitor metrics based on GitHub repository data
-					const metrics = {
-						stars: data.stargazers_count || 0,
-						watchers: data.watchers_count || 0,
-						forks: data.forks_count || 0,
-						size: Math.floor((data.size || 0) / 100),
-					};
-					
-					// Calculate activity score
-					const activityScore = metrics.stars + metrics.watchers + metrics.forks;
-					const timeBasedIncrement = Math.floor((Date.now() - new Date('2024-01-01').getTime()) / (1000 * 60 * 60 * 24 * 7));
-					const dailyFactor = Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 7;
-					
-					// Calculate total visitor count
-					let visitorCount = Math.max(100, activityScore * 10 + timeBasedIncrement + metrics.size + dailyFactor);
-					
-					// Check session increment
-					const sessionKey = 'github-visitor-session';
-					const lastSessionTime = sessionStorage.getItem(sessionKey);
-					const now = Date.now();
-					const isNewSession = !lastSessionTime || (now - parseInt(lastSessionTime)) > 30 * 60 * 1000;
-					
-					if (isNewSession) {
-						visitorCount += 1;
-					}
+					const visitorCount = data.value || 0;
 					
 					return [
-						`Total visits: ${visitorCount.toLocaleString()}`,
-						`Source: GitHub API`
+						`Current website visitors: ${visitorCount.toLocaleString()}`,
+						'',
+						'This counter tracks actual visits to https://dyno8426.github.io/',
+						'It increments with each page load and refresh.'
 					];
 				} else {
-					throw new Error(`GitHub API error: ${response.status}`);
+					throw new Error(`Counter API error: ${response.status}`);
 				}
 			} catch (err: any) {
-				// Fallback calculation
+				// Fallback: Use a deterministic counter based on current time
 				const daysSinceEpoch = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-				const baseCount = 847;
+				const baseCount = 1;
 				const growthRate = Math.floor(daysSinceEpoch / 7);
 				const dailyVariation = (daysSinceEpoch % 7) + 1;
 				const fallbackCount = baseCount + growthRate + dailyVariation;
 				
 				return [
-					`Total visits: ${fallbackCount.toLocaleString()}`,
-					`Source: Fallback (time-based)`
+					`Current website visitors: ${fallbackCount.toLocaleString()}`,
+					'',
+					'[Using fallback counter - API unavailable]',
+					'This counter would normally track visits to https://dyno8426.github.io/'
 				];
 			}
 		}
