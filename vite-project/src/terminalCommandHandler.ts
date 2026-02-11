@@ -286,50 +286,30 @@ export const commands: Record<string, Command> = {
 		desc: 'Show current website visitor count',
 		usage: 'visitors',
 		run: async () => {
-			try {
-				// Track actual website visits using countapi.xyz
-				// Increments counter on each page load and fetches current count
-				const namespace = 'dyno8426-portfolio';
-				const key = 'visits';
-				
-				const response = await fetch(
-					`https://api.countapi.xyz/hit/${namespace}/${key}`,
-					{
-						method: 'GET',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-					}
-				);
-				
-				if (response.ok) {
-					const data = await response.json();
-					const visitorCount = data.value || 0;
-					
-					return [
-						`Current website visitors: ${visitorCount.toLocaleString()}`,
-						'',
-						'This counter tracks actual visits to https://dyno8426.github.io/',
-						'It increments with each page load and refresh.'
-					];
-				} else {
-					throw new Error(`Counter API error: ${response.status}`);
+			// Track actual website visits using countapi.xyz
+			// Increments counter on each page load and fetches current count
+			const namespace = 'dyno8426-portfolio';
+			const key = 'visits';
+			
+			const response = await fetch(
+				`https://api.countapi.xyz/hit/${namespace}/${key}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
-			} catch (err: any) {
-				// Fallback: Use a deterministic counter based on current time
-				const daysSinceEpoch = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-				const baseCount = 1;
-				const growthRate = Math.floor(daysSinceEpoch / 7);
-				const dailyVariation = (daysSinceEpoch % 7) + 1;
-				const fallbackCount = baseCount + growthRate + dailyVariation;
-				
-				return [
-					`Current website visitors: ${fallbackCount.toLocaleString()}`,
-					'',
-					'[Using fallback counter - API unavailable]',
-					'This counter would normally track visits to https://dyno8426.github.io/'
-				];
-			}
+			);
+			
+			const data = await response.json();
+			const visitorCount = data.value || 0;
+			
+			return [
+				`Current website visitors: ${visitorCount.toLocaleString()}`,
+				'',
+				'Powered by countapi.xyz - tracks actual visits to https://dyno8426.github.io/',
+				'Counter increments with each page load and refresh.'
+			];
 		}
 	},
 };
