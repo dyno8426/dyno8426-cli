@@ -286,30 +286,44 @@ export const commands: Record<string, Command> = {
 		desc: 'Show current website visitor count',
 		usage: 'visitors',
 		run: async () => {
-			// Track actual website visits using countapi.xyz
-			// Increments counter on each page load and fetches current count
-			const namespace = 'dyno8426-portfolio';
-			const key = 'visits';
-			
-			const response = await fetch(
-				`https://api.countapi.xyz/hit/${namespace}/${key}`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-					},
+			try {
+				const namespace = 'dyno8426-portfolio';
+				const key = 'visits';
+				
+				const response = await fetch(
+					`https://api.countapi.xyz/hit/${namespace}/${key}`,
+					{
+						method: 'GET',
+					}
+				);
+				
+				if (!response.ok) {
+					throw new Error(`API error: ${response.status}`);
 				}
-			);
-			
-			const data = await response.json();
-			const visitorCount = data.value || 0;
-			
-			return [
-				`Current website visitors: ${visitorCount.toLocaleString()}`,
-				'',
-				'Powered by countapi.xyz - tracks actual visits to https://dyno8426.github.io/',
-				'Counter increments with each page load and refresh.'
-			];
+				
+				const data = await response.json();
+				const visitorCount = data.value || 0;
+				
+				return [
+					`Current website visitors: ${visitorCount.toLocaleString()}`,
+					'',
+					'Powered by countapi.xyz - tracks actual visits to https://dyno8426.github.io/',
+					'Counter increments with each page load and refresh.'
+				];
+			} catch (err: any) {
+				if (err && err.name === 'TypeError' && /Failed to fetch/i.test(err.message)) {
+					return [
+						'Unable to fetch visitor count.',
+						'Error: Network error or CORS issue with the counter service.',
+						'',
+						'The visitor counter may be temporarily unavailable.'
+					];
+				}
+				return [
+					'Unable to fetch visitor count.',
+					`Error: ${err?.message || String(err)}`
+				];
+			}
 		}
 	},
 };

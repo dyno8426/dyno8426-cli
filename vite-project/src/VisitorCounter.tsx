@@ -34,9 +34,6 @@ export const VisitorCounter: React.FC<VisitorCounterProps> = ({
           `https://api.countapi.xyz/hit/${namespace}/${key}`,
           {
             method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
           }
         );
         
