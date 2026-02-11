@@ -18,6 +18,7 @@ export const VisitorCounter: React.FC<VisitorCounterProps> = ({
   className = '' 
 }) => {
   const [visitCount, setVisitCount] = useState<number | null>(null);
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export const VisitorCounter: React.FC<VisitorCounterProps> = ({
         if (response.ok) {
           const data = await response.json();
           setVisitCount(data.value || 0);
+          setError(false);
         } else {
           throw new Error(`Counter API error: ${response.status}`);
         }
@@ -47,15 +49,9 @@ export const VisitorCounter: React.FC<VisitorCounterProps> = ({
       } catch (err) {
         console.error('Visitor counter error:', err);
         
-        // Fallback: Use a deterministic counter based on current time
-        // This ensures the counter always works and displays something meaningful
-        const daysSinceEpoch = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-        const baseCount = 1; // Starting base count
-        const growthRate = Math.floor(daysSinceEpoch / 7); // Weekly growth
-        const dailyVariation = (daysSinceEpoch % 7) + 1; // 1-7 daily variation
-        
-        const fallbackCount = baseCount + growthRate + dailyVariation;
-        setVisitCount(fallbackCount);
+        // If the API fails, display error state
+        setError(true);
+        setVisitCount(null);
         
       } finally {
         setLoading(false);
@@ -71,6 +67,14 @@ export const VisitorCounter: React.FC<VisitorCounterProps> = ({
     return (
       <div className={`text-xs opacity-60 ${themeClass} ${className}`}>
         Loading visits...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`text-xs opacity-80 ${themeClass} ${className}`}>
+        Visits: error
       </div>
     );
   }
